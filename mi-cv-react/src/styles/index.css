@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100&display=swap');
+
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+@keyframes glitchEffect {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+  75% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Añadimos un ligero ruido */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+  opacity: 0.03; /* Muy sutil */
+  pointer-events: none;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+  opacity: 0.05; /* Efecto muy sutil */
+  pointer-events: none; /* Que no interfiera con la navegación */
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: black; /* Fondo negro general */
+  color: white;
+  overflow-x: hidden;
+  padding-top: 80px;
+}
+
+h1, h2, h3 {
+  font-family: "'Exo 2', sans-serif";
+  letter-spacing: 2px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
