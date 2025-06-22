@@ -1,33 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ProjectsContainer, ProjectCard } from "../styles/ProjectsStyles";
-
-
+import inter from '../assets/inter.jpg'; 
 
 
 const Projects = () => {
+  const [isFading, setIsFading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    setIsFading(true);
+    window.skipManualFade = true;
+    setTimeout(() => {
+      navigate('/');
+    }, 800); // Duración del fadeOut, como en About
+  };
+
   const projects = [
     {
-      title: 'CV Web con React',
-      description: 'Proyecto personal minimalista con React + Vite.'
+      title: 'Proyectos',
+      description: 'Proyectos  de Aplicaciones Web y Moviles.',
+      github: 'https://github.com/itoito0350/Proyectos.git'
+      
     },
     {
-      title: 'Dashboard con Python & Django',
-      description: 'Panel de administración con gráficos y analítica.'
+      title: 'Civica.React-Native',
+      description: 'Aplicación multiplataforma para gestión ciudadana.',
+      github: 'https://github.com/itoito0350/proyecto-civica.git'
     },
     {
-      title: 'Landing Page con React',
-      description: 'Diseño moderno y responsive.'
-    },
-    {
-      title: 'E-commerce con Node.js',
-      description: 'Plataforma de compras con autenticación JWT.'
+      title: 'GYM-FIT',
+      description: 'Plataforma web para Gimnasio.React+Django.',
+      github: 'https://github.com/itoito0350/Django-react_project.git'
     }
   ];
 
   return (
     <ProjectsContainer
       as={motion.section}
+      className={isFading ? 'fade-out' : ''}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
@@ -41,11 +53,34 @@ const Projects = () => {
         >
           <h3>{project.title}</h3>
           <p>{project.description}</p>
+          {project.github && (
+            <p>
+              <a href={project.github} target="_blank" rel="noopener noreferrer"style={{ color: '#4CAF50', textDecoration: 'underline' }}
+>
+                Ver en GitHub
+              </a>
+            </p>
+          )}
         </ProjectCard>
       ))}
+
+      <button
+        onClick={handleBackClick}
+        style={{
+          marginTop: '2rem',
+          padding: '0.8rem 2rem',
+          background: '#4e8477',
+          color: 'white',
+          border: 'none',
+          borderRadius: '8px',
+          fontSize: '1rem',
+          cursor: 'pointer'
+        }}
+      >
+        Volver al inicio
+      </button>
     </ProjectsContainer>
   );
 };
 
 export default Projects;
-

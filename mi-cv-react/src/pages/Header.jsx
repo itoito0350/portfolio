@@ -2,10 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
-import { HeaderContainer }from "../styles/HeaderStyles";
-
-
-
+import { HeaderContainer } from "../styles/HeaderStyles";
 
 const Polygon3D = () => {
   const [size, setSize] = React.useState({ width: window.innerWidth, height: window.innerHeight });
@@ -32,7 +29,7 @@ const Polygon3D = () => {
     <HeaderContainer>
       <Canvas
         camera={{
-          position: [3, 3, 5], 
+          position: [3, 3, 5],
           fov: 50,
           aspect: size.width / size.height,
           near: 0.1,
@@ -40,20 +37,21 @@ const Polygon3D = () => {
         }}
       >
         <OrbitControls enableZoom={false} />
-
-        {/* Luces */}
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
 
-        {/* Donuts entrelazados con posición dinámica */}
+        {/* Polígono 3D desactivado temporalmente */}
+        {/* 
         <group position={[positionX, 0, 0]}>
           <WireframeDonuts />
-        </group>
+        </group> 
+        */}
       </Canvas>
     </HeaderContainer>
   );
 };
 
+// Este componente queda definido pero no se renderiza
 const WireframeDonuts = () => {
   const donut1Ref = useRef();
   const donut2Ref = useRef();
@@ -67,15 +65,12 @@ const WireframeDonuts = () => {
 
   return (
     <>
-      {/* Primer donut */}
       <group ref={donut1Ref} rotation={[Math.PI / 4, 0, 0]}>
         <lineSegments>
           <edgesGeometry attach="geometry" args={[new THREE.TorusGeometry(1.2, 0.3, 16, 100)]} />
           <lineBasicMaterial attach="material" color="rgba(255, 255, 255, 0.8)" />
         </lineSegments>
       </group>
-
-      {/* Segundo donut */}
       <group ref={donut2Ref} rotation={[-Math.PI / 4, 0, 0]}>
         <lineSegments>
           <edgesGeometry attach="geometry" args={[new THREE.TorusGeometry(1, 0.3, 16, 100)]} />

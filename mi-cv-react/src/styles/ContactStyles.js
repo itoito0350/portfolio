@@ -1,59 +1,90 @@
 import styled from 'styled-components';
+import inter from '../assets/inter.jpg';
 
 const ContactContainer = styled.section`
-  width: 100%; /* Ancho completo */
-  max-width: 800px; /* Ancho máximo para pantallas grandes */
-  margin: 80px auto; /* Centrado horizontal automático */
-  padding: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 100px 20px 40px; /* Espacio arriba para compensar el nav fijo */
   color: white;
   border-radius: 10px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 
-  /* Centrado adicional en pantallas pequeñas */
-  @media (max-width: 1200px) { 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: 90%; /* Más pequeño en pantallas pequeñas */
-    margin: 60px auto; /* Margen superior ajustado */
-    min-height: 100vh; /* Ocupa toda la pantalla */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(${inter});
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(180deg);
+    opacity: 0.2;
+    z-index: 0;
+    pointer-events: none;
   }
 
-  /* Estilos del título h2 */
+  @media (max-width: 1200px) {
+    padding: 80px 15px 30px;
+    max-width: 90%;
+  }
+
+  @media (max-width: 768px) {
+    padding: 60px 10px 30px;
+  }
+
   h2 {
     font-family: ${(props) => props.theme.fontFamily.main};
     letter-spacing: 1.5px;
     margin-bottom: 20px;
-    font-size: 2rem; /* Tamaño base */
+    font-size: 2rem;
+    position: relative;
+    z-index: 2;
 
     @media (max-width: 1200px) { 
-      font-size: 1.8rem; /* Un poco más pequeño en laptops */
+      font-size: 1.8rem;
     }
 
     @media (max-width: 768px) { 
-      font-size: 1.5rem; /* Mucho más pequeño en móviles */
+      font-size: 1.5rem;
     }
   }
 
-  /* Estilos del párrafo p */
   p {
     font-size: 1.2rem;
     line-height: 1.6;
     margin-bottom: 20px;
     font-family: ${(props) => props.theme.fontFamily.main};
+    position: relative;
+    z-index: 2;
 
     @media (max-width: 1200px) { 
-      font-size: 1rem; /* Más pequeño en laptops */
+      font-size: 1rem;
     }
 
     @media (max-width: 768px) { 
-      font-size: 0.9rem; /* Aún más pequeño en móviles */
+      font-size: 0.9rem;
     }
   }
+
+  button {
+    margin-top: 2rem;
+    padding: 0.8rem 2rem;
+    background: #4e8477;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+  }
 `;
-
-
 
 const InfoContainer = styled.div`
   display: flex;

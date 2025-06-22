@@ -1,40 +1,95 @@
+// src/styles/ProjectsStyles.js
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import inter from '../assets/inter.jpg';
+
 
 const ProjectsContainer = styled.section`
   max-width: 1000px;
-  margin: 80px auto;
-  padding: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  
+  margin: 2rem auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(${inter});
+  background-size: cover;
+  background-position: center;
+  transform: rotate(180deg);
+  opacity: 0.2;
+  z-index: 0;
+}
+
+  &.fade-out {
+    animation: fadeOut 0.8s ease forwards;
+  }
+
+  button {
+    margin-top: 2rem;
+    padding: 0.6rem 1.5rem;
+    background: #4e8477;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    button {
+      margin-top: 1.5rem;
+    }
+  }
 `;
 
-const ProjectCard = styled(motion.div)`
-  background-color: #000;  /* Fondo negro */
-  padding: 20px;
-  border-radius: 10px;
-  overflow: hidden;
-  transition: 0.3s ease;
-  cursor: pointer;
+const ProjectCard = styled.div`
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #4e847720;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  width: 100%;
+  max-width: 600px;
+  color: #ccc;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  backdrop-filter: blur(4px);
+  position: relative;
+  z-index: 2;
 
   h3 {
-    font-size: 1.5rem;
-    color: #4e8477;  /* Título en verde claro */
-    font-family: ${(props) => props.theme.fontFamily.main};
+    font-size: 1.3rem;
+    color: #ffffff;
   }
 
   p {
-    color: white;  /* Texto blanco */
-    margin-top: 10px;
-    font-family: ${(props) => props.theme.fontFamily.main};
-  }
-
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    background-color: #333;  /* Fondo ligeramente más claro al hacer hover */
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #b3b3b3;
   }
 `;
+
 export { ProjectsContainer, ProjectCard };

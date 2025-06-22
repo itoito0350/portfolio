@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // <-- para navegación programática
 import { 
   Nav, Logo, Title, Subtitle, Menu, MenuItem, MenuLink, 
   BurgerMenu, BurgerLines, MobileMenu 
@@ -7,64 +7,85 @@ import {
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Función para manejar clic en link y esperar animación antes de navegar
+  const handleNavClick = (path) => {
+    setMenuOpen(false); // cerrar menú primero (esto activa la animación de cierre)
+    
+    // Esperamos 300ms que coincida con la duración del fade-out
+    setTimeout(() => {
+      navigate(path);
+    }, 300);
+  };
 
   return (
     <Nav>
-      
-      <Link to="/" onClick={() => setMenuOpen(false)}>
-        <Logo
-          initial={{ opacity: 0, y: -100, scale: 1.2 }}
+      <Logo
+        initial={{ opacity: 0, y: -100, scale: 1.2 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        onClick={() => {
+          if (menuOpen) setMenuOpen(false);
+          navigate("/");
+        }}
+        style={{ cursor: "pointer" }}
+      >
+        <Title>
+          Milagros<span>Angulo</span>
+        </Title>
+        <Subtitle
+          initial={{ opacity: 0, y: 50, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
         >
-          <Title>
-            Milagros<span>Angulo</span>
-          </Title>
-          <Subtitle
-            initial={{ opacity: 0, y: 50, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-          >
-            FullStack Developer & UI/UX Designer
-          </Subtitle>
-        </Logo>
-      </Link>
+          FullStack Developer & UI/UX Designer
+        </Subtitle>
+      </Logo>
 
-      
       <BurgerMenu onClick={() => setMenuOpen(!menuOpen)}>
         <BurgerLines />
         <BurgerLines />
         <BurgerLines />
       </BurgerMenu>
 
-      
       <Menu>
-        <MenuItem><MenuLink to="/about"><span>SOBRE MÍ</span></MenuLink></MenuItem>
-        <MenuItem><MenuLink to="/skills"><span>SKILLS</span></MenuLink></MenuItem>
-        <MenuItem><MenuLink to="/projects"><span>PROYECTOS</span></MenuLink></MenuItem>
-        <MenuItem><MenuLink to="/contact"><span>CONTACTO</span></MenuLink></MenuItem>
+        <MenuItem>
+          <MenuLink as="div" onClick={() => navigate("/about")}>
+            <span>ABOUT</span>
+          </MenuLink>
+        </MenuItem>
+        <MenuItem>
+          <MenuLink as="div" onClick={() => navigate("/projects")}>
+            <span>PROJECTS</span>
+          </MenuLink>
+        </MenuItem>
+        <MenuItem>
+          <MenuLink as="div" onClick={() => navigate("/contact")}>
+            <span>CONTACT</span>
+          </MenuLink>
+        </MenuItem>
       </Menu>
 
-      
-      {menuOpen && (
-        <MobileMenu
-        className={menuOpen ? "open" : ""}>
-          <MenuItem><MenuLink to="/about" onClick={() => setMenuOpen(false)}>SOBRE MÍ</MenuLink></MenuItem>
-          <MenuItem><MenuLink to="/skills" onClick={() => setMenuOpen(false)}>SKILLS</MenuLink></MenuItem>
-          <MenuItem><MenuLink to="/projects" onClick={() => setMenuOpen(false)}>PROYECTOS</MenuLink></MenuItem>
-          <MenuItem><MenuLink to="/contact" onClick={() => setMenuOpen(false)}>CONTACTO</MenuLink></MenuItem>
-        </MobileMenu>
-      )}
+      <MobileMenu className={menuOpen ? "open" : ""}>
+        <MenuItem>
+          <MenuLink as="div" onClick={() => handleNavClick("/about")}>
+            <span>ABOUT ME</span>
+          </MenuLink>
+        </MenuItem>
+        <MenuItem>
+          <MenuLink as="div" onClick={() => handleNavClick("/projects")}>
+            <span>PROJECTS</span>
+          </MenuLink>
+        </MenuItem>
+        <MenuItem>
+          <MenuLink as="div" onClick={() => handleNavClick("/contact")}>
+            <span>CONTACT</span>
+          </MenuLink>
+        </MenuItem>
+      </MobileMenu>
     </Nav>
   );
 };
 
 export default Navbar;
-
-
-
-
-
-
-
-

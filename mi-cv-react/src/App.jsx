@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import './styles/App.css'; 
 import GlitchBackground from './components/GlitchBackground';
@@ -10,59 +10,70 @@ import Header from './pages/Header';
 import Skills from './pages/Skills';
 import Projects from './pages/Projects';
 import Navbar from './components/Navbar';
+import SkillsTicker from './components/SkillsTicker';
 
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(true); // Inicia con la animación activa
+  const [isAnimating, setIsAnimating] = useState(true);
   const [showContent, setShowContent] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    setIsAnimating(true); 
-    setShowContent(false); 
+    // Evitar animación de cortinas si se navega desde fade out manual
+    const skipTransition = window.skipManualFade;
 
-    setTimeout(() => {
-      setIsAnimating(false); 
-      setShowContent(true); 
-    }, 1500); 
+    if (skipTransition) {
+      setIsAnimating(false);
+      setShowContent(true);
+      window.skipManualFade = false; // resetear flag
+      return;
+    }
 
-  }, []); 
+    setIsAnimating(true);
+    setShowContent(false);
 
-  useEffect(() => {
-    setIsAnimating(true); 
-    setShowContent(false); 
+    const timer = setTimeout(() => {
+      setIsAnimating(false);
+      setShowContent(true);
+    }, 800);
 
-    setTimeout(() => {
-      setIsAnimating(false); 
-      setShowContent(true); 
-    }, 1500); 
+    return () => clearTimeout(timer);
+  }, [location]);
 
-  }, [location]); 
+  const isHome = location.pathname === '/';
 
   return (
     <ThemeProvider theme={theme}>
       <GlitchBackground />
-      <Navbar setIsAnimating={setIsAnimating} />
-      
-      {/* PageTransition controla la animación global */}
+      {isHome && <Navbar setIsAnimating={setIsAnimating} />}
       <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
 
-      <div style={{ marginTop: '200px', marginRight: '300px' }}>
+      <div
+        style={{
+          marginTop: isHome ? '200px' : '40px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          maxWidth: '1200px',
+          padding: '0 1rem',
+        }}
+      >
         <AnimatePresence mode="wait">
           {showContent && (
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Header />} />
               <Route path="/about" element={<About />} />
               <Route path="/projects" element={<Projects />} />
-              <Route path="/skills" element={<Skills />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/skills" element={<Skills />} />
             </Routes>
           )}
         </AnimatePresence>
       </div>
+
+      <SkillsTicker />
     </ThemeProvider>
   );
 };

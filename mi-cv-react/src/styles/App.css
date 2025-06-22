@@ -16,7 +16,7 @@ html, body {
   width: 100%;
   max-width: 1400px; /* Para pantallas grandes */
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 2rem 5rem 2rem;
   text-align: center;
   height: 100vh; 
   min-height: 100vh;
@@ -106,6 +106,20 @@ html, body {
 
   .card {
     padding: 1em;
+  }
+}
+.fade-out {
+  animation: fadeOut 0.8s ease forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
   }
 }
 
