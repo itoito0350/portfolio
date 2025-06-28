@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import './styles/App.css'; 
 import GlitchBackground from './components/GlitchBackground';
@@ -17,35 +17,27 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [showContent, setShowContent] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(true);
+  const [showContent, setShowContent] = useState(false);
   const location = useLocation();
-  const isFirstRender = useRef(true); // <-- flag para detectar primer render
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      // En el primer render no hacemos animación ni ocultamos contenido
-      isFirstRender.current = false;
-      setIsAnimating(false);
-      setShowContent(true);
-      return;
-    }
+    const skipTransition = window.skipManualFade;
 
-    if (window.skipManualFade) {
+    if (skipTransition) {
       setIsAnimating(false);
       setShowContent(true);
       window.skipManualFade = false;
       return;
     }
 
-    // En navegación normal: activa animación, oculta contenido
     setIsAnimating(true);
     setShowContent(false);
 
     const timer = setTimeout(() => {
       setIsAnimating(false);
       setShowContent(true);
-    }, 1000);
+    }, 800);
 
     return () => clearTimeout(timer);
   }, [location]);
@@ -67,15 +59,23 @@ const App = () => {
           padding: '0 1rem',
         }}
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           {showContent && (
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<Header />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/skills" element={<Skills />} />
-            </Routes>
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<Header />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/skills" element={<Skills />} />
+              </Routes>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
