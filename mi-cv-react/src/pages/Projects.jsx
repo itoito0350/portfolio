@@ -19,7 +19,7 @@ const Projects = () => {
 
   const projects = [
     {
-      title: 'Proyects',
+      title: 'Projects',
       description: 'Web and Mobile Application Projects.',
       github: 'https://github.com/itoito0350/Proyectos.git'
       
