@@ -45,7 +45,7 @@ const Contact = () => {
         </Link>
       </SocialLinks>
 
-      <button onClick={handleBackClick}>Volver al inicio</button>
+      <button onClick={handleBackClick}>Back to top</button>
     </ContactContainer>
   );
 };
