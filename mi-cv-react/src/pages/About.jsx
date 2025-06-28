@@ -27,7 +27,7 @@ const About = () => {
         <br /><br />
         Throughout my journey, I’ve earned certifications in <span>UX Design, Python Automation, Machine Learning and more</span>, giving me a  <span>global perspective</span> of software development, from server logic to  <span>user experience.</span>.  
         <br /><br />
-        Working with others to overcome <span>complex challenges</span>is something I truly enjoy. Always committed to continuous learning.
+        Working with others to overcome <span>complex challenges</span> is something I truly enjoy. Always committed to continuous learning.
       </p>
       <button
         onClick={handleBackClick}
