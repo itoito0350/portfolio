@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TransitionContainer, TopLayer, BottomLayer, GlitchLine } from "../styles/PageTransitionStyles";
 
-const PageTransition = ({ isAnimating, isFirstLoad, onAnimationComplete }) => {
+const PageTransition = ({ animationStage, setAnimationStage, onOpeningComplete }) => {
   const [lines, setLines] = useState([]);
 
+  // Genera líneas glitch solo una vez
   useEffect(() => {
     const generateRandomLine = () => {
       const randomDirection = Math.random() > 0.5 ? 'horizontal' : 'vertical';
@@ -14,49 +15,52 @@ const PageTransition = ({ isAnimating, isFirstLoad, onAnimationComplete }) => {
       const randomLength = Math.random() * (maxLength - minLength) + minLength;
       const randomOrigin = Math.random();
 
-      setLines((prevLines) => [
-        ...prevLines,
-        { randomDirection, randomX, randomY, randomLength, randomOrigin },
-      ]);
+      return { randomDirection, randomX, randomY, randomLength, randomOrigin };
     };
 
+    const newLines = [];
     for (let i = 0; i < 30; i++) {
-      generateRandomLine();
+      newLines.push(generateRandomLine());
     }
+    setLines(newLines);
   }, []);
 
-  if (!isAnimating) {
-    return null; // No mostrar nada si no está animando
+  if (animationStage === 'idle') {
+    return null; // No mostrar nada si idle
   }
 
   return (
     <TransitionContainer>
       <TopLayer
-        initial={{ y: '-100%' }}
-        animate={{ y: '0%' }}
-        exit={{ y: '-100%' }}
+        initial={animationStage === 'closing' ? { y: '-100%' } : { y: '0%' }}
+        animate={animationStage === 'closing' ? { y: '0%' } : { y: '-100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
         onAnimationComplete={() => {
-          if (onAnimationComplete) onAnimationComplete();
+          if (animationStage === 'closing') {
+            setAnimationStage('opening');
+          } else if (animationStage === 'opening') {
+            onOpeningComplete();
+          }
         }}
       />
       <BottomLayer
-        initial={{ y: '100%' }}
-        animate={{ y: '0%' }}
-        exit={{ y: '100%' }}
+        initial={animationStage === 'closing' ? { y: '100%' } : { y: '0%' }}
+        animate={animationStage === 'closing' ? { y: '0%' } : { y: '100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
-      
+
       {lines.map((line, index) => (
         <GlitchLine
           key={index}
           className={line.randomDirection}
           animate={{
             opacity: [0, 0.4, 1, 0.4, 0],
-            width: line.randomDirection === 'horizontal' ? 
-              (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
-            height: line.randomDirection === 'vertical' ? 
-              (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
+            width: line.randomDirection === 'horizontal'
+              ? (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%'])
+              : undefined,
+            height: line.randomDirection === 'vertical'
+              ? (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%'])
+              : undefined,
           }}
           transition={{
             duration: 3 + Math.random(),
@@ -78,4 +82,5 @@ const PageTransition = ({ isAnimating, isFirstLoad, onAnimationComplete }) => {
 };
 
 export default PageTransition;
+
 
