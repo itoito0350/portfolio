@@ -18,8 +18,10 @@ const Contact = () => {
 
   return (
     <ContactContainer className={isFading ? 'fade-out' : ''}>
-      <h2>Contacta conmigo</h2>
-      <p>Si deseas ponerte en contacto o ver mis proyectos, no dudes en hacer clic en los iconos de abajo.</p>
+      <h2>Contact me</h2>
+      <p>If you want to get in touch or check out my projects, feel free to click the icons below.
+
+</p>
       
       <InfoContainer>
         <ContactInfo>
