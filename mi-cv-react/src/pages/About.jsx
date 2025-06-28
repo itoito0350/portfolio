@@ -18,16 +18,16 @@ const About = () => {
   return (
     <AboutContainer className={isFading ? 'fade-out' : ''}>
       <GreenSmoke /> {/* fondo */}
-      <h2>Sobre mí</h2>
+      <h2>About me</h2>
       <p>
-        Apasionada por la <span>tecnología</span> y los <span>retos constantes</span>.  
-        Mi carrera como <strong>Full Stack Developer</strong> comienza en el área de <span>Frontend</span>, como freelancer, donde desarrollo interfaces modernas y <span>minimalistas</span>.
+        Passionate about <span>technology </span> and <span> constant challenges.</span>.  
+        My career as a<strong>Full Stack Developer</strong> began in the <span>Frontend</span> field, working as a freelancer, where I created modern and minimalist <span>interfaces</span>.
         <br /><br />  
-        Buscando ampliar mis conocimientos, me especializo en <span>Backend</span> y Arquitectura de Software a través de mis estudios oficiales en <span>Desarrollo de Aplicaciones Multiplataforma</span>. 
+       Seeking to expand my knowledge, I specialized in  <span>Backend development and Software Architecture</span> through formal studies in  <span>Multiplatform Application Development.</span>. 
         <br /><br />
-        A lo largo de mi trayectoria, obtengo certificaciones en <span>UX Design, Python Automation, Machine Learning, etc.</span>, permitiéndome tener una <span>visión global</span> del desarrollo de software, desde la lógica del servidor hasta la <span>experiencia de usuario</span>.  
+        Throughout my journey, I’ve earned certifications in <span>UX Design, Python Automation, Machine Learning and more</span>, giving me a  <span>global perspective</span> of software development, from server logic to  <span>user experience.</span>.  
         <br /><br />
-        Disfruto trabajando en <span>equipo</span> y enfrentando <span>desafíos complejos</span>. Siempre comprometida con la formación continua.
+        Working with others to overcome <span>complex challenges</span>is something I truly enjoy. Always committed to continuous learning.
       </p>
       <button
         onClick={handleBackClick}
@@ -44,7 +44,7 @@ const About = () => {
           zIndex: 2,
         }}
       >
-        Volver al inicio
+        Back to top
       </button>
     </AboutContainer>
   );
