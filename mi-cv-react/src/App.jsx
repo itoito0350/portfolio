@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import './styles/App.css'; 
@@ -17,14 +17,30 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const [animationStage, setAnimationStage] = useState('idle'); // 'idle' | 'closing' | 'opening'
-  const [showContent, setShowContent] = useState(false);
   const location = useLocation();
 
+  // Estado para la animación y mostrar contenido
+  const [animationStage, setAnimationStage] = useState('idle'); // 'idle' | 'closing' | 'opening'
+  const [showContent, setShowContent] = useState(false);
+
+  // Guardamos la ruta previa para comparar
+  const previousPath = useRef(location.pathname);
+
   useEffect(() => {
-    // Cuando cambia la ruta, inicia animación de cierre
-    setAnimationStage('closing');
-    setShowContent(false);
+    const comingFromHome = previousPath.current === '/';
+    const goingToHome = location.pathname === '/';
+
+    if (comingFromHome && !goingToHome) {
+      // Salimos del home: animamos transición completa
+      setAnimationStage('closing');
+      setShowContent(false);
+    } else {
+      // Entramos al home o navegamos dentro de otras páginas: no animar
+      setAnimationStage('idle');
+      setShowContent(true);
+    }
+
+    previousPath.current = location.pathname;
   }, [location]);
 
   const isHome = location.pathname === '/';
@@ -34,14 +50,17 @@ const App = () => {
       <GlitchBackground />
       {isHome && <Navbar />}
       
-      <PageTransition
-        animationStage={animationStage}
-        setAnimationStage={setAnimationStage}
-        onOpeningComplete={() => {
-          setShowContent(true);
-          setAnimationStage('idle');
-        }}
-      />
+      {/* Solo renderizamos animación si está en closing o opening */}
+      {(animationStage === 'closing' || animationStage === 'opening') && (
+        <PageTransition
+          animationStage={animationStage}
+          setAnimationStage={setAnimationStage}
+          onOpeningComplete={() => {
+            setShowContent(true);
+            setAnimationStage('idle');
+          }}
+        />
+      )}
 
       <div
         style={{
