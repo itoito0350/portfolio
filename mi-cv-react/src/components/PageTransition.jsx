@@ -1,54 +1,58 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TransitionContainer, TopLayer, BottomLayer, GlitchLine } from "../styles/PageTransitionStyles";
 
-const generateLines = (count = 30) => {
-  return Array.from({ length: count }, () => {
-    const randomDirection = Math.random() > 0.5 ? 'horizontal' : 'vertical';
-    const randomX = Math.random() * window.innerWidth;
-    const randomY = Math.random() * window.innerHeight;
-    const minLength = randomDirection === 'horizontal'
-      ? window.innerWidth * 0.5
-      : window.innerHeight * 0.5;
-    const maxLength = randomDirection === 'horizontal'
-      ? window.innerWidth * 1
-      : window.innerHeight * 1.5;
-    const randomLength = Math.random() * (maxLength - minLength) + minLength;
-    const randomOrigin = Math.random();
+const PageTransition = ({ isAnimating, isFirstLoad }) => {
+  const [lines, setLines] = useState([]);
 
-    return { randomDirection, randomX, randomY, randomLength, randomOrigin };
-  });
-};
+  useEffect(() => {
+    const generateRandomLine = () => {
+      const randomDirection = Math.random() > 0.5 ? 'horizontal' : 'vertical';
+      const randomX = Math.random() * window.innerWidth;
+      const randomY = Math.random() * window.innerHeight;
+      const minLength = randomDirection === 'horizontal' ? window.innerWidth * 0.5 : window.innerHeight * 0.5;
+      const maxLength = randomDirection === 'horizontal' ? window.innerWidth * 1 : window.innerHeight * 1.5;
+      const randomLength = Math.random() * (maxLength - minLength) + minLength;
+      const randomOrigin = Math.random();
 
-const PageTransition = ({ isAnimating }) => {
-  const [lines] = useState(generateLines());
+      setLines((prevLines) => [
+        ...prevLines,
+        { randomDirection, randomX, randomY, randomLength, randomOrigin },
+      ]);
+    };
+
+    for (let i = 0; i < 30; i++) {
+      generateRandomLine();
+    }
+  }, []);
+
+  // Si es la primera carga, no animamos la apertura para evitar salto
+  const topLayerInitial = isFirstLoad ? { y: '0%' } : { y: '-100%' };
+  const bottomLayerInitial = isFirstLoad ? { y: '0%' } : { y: '100%' };
 
   return (
     <TransitionContainer>
       <TopLayer
-        initial={{ y: '-100%' }}
+        initial={topLayerInitial}
         animate={{ y: isAnimating ? '0%' : '-100%' }}
         exit={{ y: '-100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
       <BottomLayer
-        initial={{ y: '100%' }}
+        initial={bottomLayerInitial}
         animate={{ y: isAnimating ? '0%' : '100%' }}
         exit={{ y: '100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
-
       {lines.map((line, index) => (
         <GlitchLine
           key={index}
           className={line.randomDirection}
           animate={{
             opacity: [0, 0.4, 1, 0.4, 0],
-            width: line.randomDirection === 'horizontal'
-              ? (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%'])
-              : undefined,
-            height: line.randomDirection === 'vertical'
-              ? (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%'])
-              : undefined,
+            width: line.randomDirection === 'horizontal' ?
+              (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
+            height: line.randomDirection === 'vertical' ?
+              (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
           }}
           transition={{
             duration: 3 + Math.random(),
