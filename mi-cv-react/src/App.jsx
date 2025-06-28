@@ -20,18 +20,17 @@ const App = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const location = useLocation();
-  const isFirstRender = useRef(true);
+  const isFirstRender = useRef(true); // <-- flag para detectar primer render
 
   useEffect(() => {
-    // Para evitar animación al montar la app por primera vez
     if (isFirstRender.current) {
+      // En el primer render no hacemos animación ni ocultamos contenido
       isFirstRender.current = false;
       setIsAnimating(false);
       setShowContent(true);
       return;
     }
 
-    // Evitar animación si hay flag externo (como antes)
     if (window.skipManualFade) {
       setIsAnimating(false);
       setShowContent(true);
@@ -39,14 +38,14 @@ const App = () => {
       return;
     }
 
-    // Si es navegación normal, animar
+    // En navegación normal: activa animación, oculta contenido
     setIsAnimating(true);
     setShowContent(false);
 
     const timer = setTimeout(() => {
       setIsAnimating(false);
       setShowContent(true);
-    }, 1000); // duración del overlay + buffer
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [location]);
@@ -57,7 +56,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlitchBackground />
       {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      <PageTransition isAnimating={isAnimating} />
+      <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
 
       <div
         style={{
