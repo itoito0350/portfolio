@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TransitionContainer, TopLayer, BottomLayer, GlitchLine } from "../styles/PageTransitionStyles";
 
-const PageTransition = ({ isAnimating, isFirstLoad }) => {
+const PageTransition = ({ isAnimating, isFirstLoad, onAnimationComplete }) => {
   const [lines, setLines] = useState([]);
 
   useEffect(() => {
@@ -25,33 +25,37 @@ const PageTransition = ({ isAnimating, isFirstLoad }) => {
     }
   }, []);
 
-  // Si es la primera carga, no animamos la apertura para evitar salto
-  const topLayerInitial = isFirstLoad ? { y: '0%' } : { y: '-100%' };
-  const bottomLayerInitial = isFirstLoad ? { y: '0%' } : { y: '100%' };
+  if (!isAnimating) {
+    return null; // No mostrar nada si no está animando
+  }
 
   return (
     <TransitionContainer>
       <TopLayer
-        initial={topLayerInitial}
-        animate={{ y: isAnimating ? '0%' : '-100%' }}
+        initial={{ y: '-100%' }}
+        animate={{ y: '0%' }}
         exit={{ y: '-100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
+        onAnimationComplete={() => {
+          if (onAnimationComplete) onAnimationComplete();
+        }}
       />
       <BottomLayer
-        initial={bottomLayerInitial}
-        animate={{ y: isAnimating ? '0%' : '100%' }}
+        initial={{ y: '100%' }}
+        animate={{ y: '0%' }}
         exit={{ y: '100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
+      
       {lines.map((line, index) => (
         <GlitchLine
           key={index}
           className={line.randomDirection}
           animate={{
             opacity: [0, 0.4, 1, 0.4, 0],
-            width: line.randomDirection === 'horizontal' ?
+            width: line.randomDirection === 'horizontal' ? 
               (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
-            height: line.randomDirection === 'vertical' ?
+            height: line.randomDirection === 'vertical' ? 
               (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
           }}
           transition={{
@@ -74,3 +78,4 @@ const PageTransition = ({ isAnimating, isFirstLoad }) => {
 };
 
 export default PageTransition;
+
