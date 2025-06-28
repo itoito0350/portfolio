@@ -12,7 +12,7 @@ const Projects = () => {
     window.skipManualFade = true;
     setTimeout(() => {
       navigate('/');
-    }, 800); // Duración del fadeOut
+    }, 800);
   };
 
   const projects = [
@@ -37,16 +37,16 @@ const Projects = () => {
     <ProjectsContainer
       as={motion.section}
       className={isFading ? 'fade-out' : ''}
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
       viewport={{ once: true }}
-      id="projects"
     >
       <h2>My Projects</h2>
-      {projects.map((project, index) => (
+
+      {projects.map((project, i) => (
         <ProjectCard
-          key={index}
+          key={i}
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
@@ -67,11 +67,10 @@ const Projects = () => {
         </ProjectCard>
       ))}
 
-      <button onClick={handleBackClick}>
-        Back to top
-      </button>
+      <button onClick={handleBackClick}>Back to top</button>
     </ProjectsContainer>
   );
 };
 
 export default Projects;
+
