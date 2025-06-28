@@ -45,6 +45,7 @@ const Projects = () => {
       transition={{ duration: 1 }}
       viewport={{ once: true }}
     >
+      <h2>My Projects</h2>
       {projects.map((project, index) => (
         <ProjectCard
           key={index}
