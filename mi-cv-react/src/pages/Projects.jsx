@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ProjectsContainer, ProjectCard } from "../styles/ProjectsStyles";
-import inter from '../assets/inter.jpg'; 
-
 
 const Projects = () => {
   const [isFading, setIsFading] = useState(false);
@@ -14,15 +12,14 @@ const Projects = () => {
     window.skipManualFade = true;
     setTimeout(() => {
       navigate('/');
-    }, 800); // Duración del fadeOut, como en About
+    }, 800); // Duración del fadeOut
   };
 
   const projects = [
     {
-      title: 'Projects',
+      title: 'My Projects',
       description: 'Web and Mobile Application Projects.',
       github: 'https://github.com/itoito0350/Proyectos.git'
-      
     },
     {
       title: 'Civica.React-Native',
@@ -44,6 +41,7 @@ const Projects = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
       viewport={{ once: true }}
+      id="projects"
     >
       <h2>My Projects</h2>
       {projects.map((project, index) => (
@@ -56,8 +54,12 @@ const Projects = () => {
           <p>{project.description}</p>
           {project.github && (
             <p>
-              <a href={project.github} target="_blank" rel="noopener noreferrer"style={{ color: '#4CAF50', textDecoration: 'underline' }}
->
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#4CAF50', textDecoration: 'underline' }}
+              >
                 View on GitHub
               </a>
             </p>
@@ -65,19 +67,7 @@ const Projects = () => {
         </ProjectCard>
       ))}
 
-      <button
-        onClick={handleBackClick}
-        style={{
-          marginTop: '2rem',
-          padding: '0.8rem 2rem',
-          background: '#4e8477',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          fontSize: '1rem',
-          cursor: 'pointer'
-        }}
-      >
+      <button onClick={handleBackClick}>
         Back to top
       </button>
     </ProjectsContainer>
