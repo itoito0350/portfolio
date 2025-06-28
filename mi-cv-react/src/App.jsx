@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import './styles/App.css'; 
+
 import GlitchBackground from './components/GlitchBackground';
 import PageTransition from './components/PageTransition';
 import Contact from './pages/Contact';
@@ -14,44 +14,34 @@ import SkillsTicker from './components/SkillsTicker';
 
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
-import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [showContent, setShowContent] = useState(false);
-  const [isFirstLoad, setIsFirstLoad] = useState(true); // NUEVO
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
-    // Evitar animación de cortinas si se navega desde fade out manual
     const skipTransition = window.skipManualFade;
 
     if (skipTransition) {
       setIsAnimating(false);
       setShowContent(true);
-      window.skipManualFade = false; // resetear flag
+      window.skipManualFade = false;
       return;
     }
 
-    if (isFirstLoad) {
-      // Primera carga: mostrar contenido sin animar apertura para evitar salto
-      setIsAnimating(false);
-      setShowContent(true);
-      setIsFirstLoad(false);
-      return;
-    }
-
-    // Para las siguientes navegaciones, hacer la animación normal
     setIsAnimating(true);
     setShowContent(false);
 
     const timer = setTimeout(() => {
       setIsAnimating(false);
       setShowContent(true);
+      setIsFirstLoad(false); // Aquí marcamos que ya no es la primera carga
     }, 800);
 
     return () => clearTimeout(timer);
-  }, [location, isFirstLoad]);
+  }, [location]);
 
   const isHome = location.pathname === '/';
 
@@ -59,7 +49,11 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlitchBackground />
       {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
+      <PageTransition
+        isAnimating={isAnimating}
+        setIsAnimating={setIsAnimating}
+        isFirstLoad={isFirstLoad}
+      />
 
       <div
         style={{
