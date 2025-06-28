@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { TransitionContainer, TopLayer, BottomLayer, GlitchLine } from "../styles/PageTransitionStyles";
 
 const PageTransition = ({ isAnimating }) => {
-  const [lines, setLines] = useState([]); // Para almacenar las líneas generadas
+  const [lines, setLines] = useState([]);
 
   useEffect(() => {
     const generateRandomLine = () => {
@@ -46,12 +46,10 @@ const PageTransition = ({ isAnimating }) => {
           className={line.randomDirection}
           animate={{
             opacity: [0, 0.4, 1, 0.4, 0],
-            width: line.randomDirection === 'horizontal'
-              ? (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%'])
-              : undefined,
-            height: line.randomDirection === 'vertical'
-              ? (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%'])
-              : undefined,
+            width: line.randomDirection === 'horizontal' ? 
+              (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
+            height: line.randomDirection === 'vertical' ? 
+              (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
           }}
           transition={{
             duration: 3 + Math.random(),
@@ -73,6 +71,7 @@ const PageTransition = ({ isAnimating }) => {
 };
 
 export default PageTransition;
+
 
 
 
