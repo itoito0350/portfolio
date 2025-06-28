@@ -19,19 +19,19 @@ const Projects = () => {
 
   const projects = [
     {
-      title: 'Proyectos',
-      description: 'Proyectos  de Aplicaciones Web y Moviles.',
+      title: 'Proyects',
+      description: 'Web and Mobile Application Projects.',
       github: 'https://github.com/itoito0350/Proyectos.git'
       
     },
     {
       title: 'Civica.React-Native',
-      description: 'Aplicación multiplataforma para gestión ciudadana.',
+      description: 'Cross-platform app for citizen management.',
       github: 'https://github.com/itoito0350/proyecto-civica.git'
     },
     {
       title: 'GYM-FIT',
-      description: 'Plataforma web para Gimnasio.React+Django.',
+      description: 'Web platform for gyms. React + Django.',
       github: 'https://github.com/itoito0350/Django-react_project.git'
     }
   ];
@@ -57,7 +57,7 @@ const Projects = () => {
             <p>
               <a href={project.github} target="_blank" rel="noopener noreferrer"style={{ color: '#4CAF50', textDecoration: 'underline' }}
 >
-                Ver en GitHub
+                View on GitHub
               </a>
             </p>
           )}
@@ -77,7 +77,7 @@ const Projects = () => {
           cursor: 'pointer'
         }}
       >
-        Volver al inicio
+        Back to top
       </button>
     </ProjectsContainer>
   );
