@@ -1,37 +1,38 @@
-// src/styles/ProjectsStyles.js
 import styled from 'styled-components';
-import inter from '../assets/inter.jpg';
-
+import interBackground from '../assets/inter.jpg';
+import { motion } from 'framer-motion';
 
 const ProjectsContainer = styled.section`
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 2rem;
   position: relative;
-  z-index: 1;
+  overflow: hidden;
+  padding: 100px 20px 40px;
+  max-width: 800px;
+  margin: 0 auto;
   text-align: center;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  color: white;
+  border-radius: 10px;
+  scroll-margin-top: 120px;
 
   &::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url(${inter});
-  background-size: cover;
-  background-position: center;
-  transform: rotate(180deg);
-  opacity: 0.2;
-  z-index: 0;
-}
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(${interBackground});
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: rotate(180deg);
+    opacity: 0.2;
+    z-index: 0;
+    pointer-events: none;
+  }
 
-  &.fade-out {
-    animation: fadeOut 0.8s ease forwards;
+  > * {
+    position: relative;
+    z-index: 2;
   }
 
   h2 {
@@ -43,58 +44,54 @@ const ProjectsContainer = styled.section`
 
   button {
     margin-top: 2rem;
-    padding: 0.6rem 1.5rem;
+    padding: 0.8rem 2rem;
     background: #4e8477;
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 0.95rem;
+    font-size: 1rem;
     cursor: pointer;
     position: relative;
     z-index: 2;
   }
 
-  @keyframes fadeOut {
-    0% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    100% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-  }
-
   @media (max-width: 768px) {
-    padding: 1rem;
-    button {
-      margin-top: 1.5rem;
+    padding: 80px 15px 30px;
+
+    h2 {
+      font-size: 2rem;
     }
   }
 `;
 
-const ProjectCard = styled.div`
-  background: transparent;
-  border: none;
+const ProjectCard = styled(motion.div)`
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   padding: 1.5rem;
-  margin: 1rem 0;
-  width: 100%;
-  max-width: 600px;
-  color: #ccc;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  backdrop-filter: blur(4px);
-  position: relative;
-  z-index: 2;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease-in-out;
 
   h3 {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
     color: #ffffff;
   }
 
   p {
-    margin-top: 0.5rem;
     font-size: 1rem;
     color: #b3b3b3;
+  }
+
+  a {
+    font-weight: bold;
+    color: #4CAF50;
+    text-decoration: underline;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    transform: translateY(-4px);
   }
 `;
 
