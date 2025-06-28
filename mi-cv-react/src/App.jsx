@@ -17,30 +17,38 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [showContent, setShowContent] = useState(true);
   const location = useLocation();
-
-  // Estado para la animación y mostrar contenido
-  const [animationStage, setAnimationStage] = useState('idle'); // 'idle' | 'closing' | 'opening'
-  const [showContent, setShowContent] = useState(false);
-
-  // Guardamos la ruta previa para comparar
-  const previousPath = useRef(location.pathname);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
-    const comingFromHome = previousPath.current === '/';
-    const goingToHome = location.pathname === '/';
-
-    if (comingFromHome && !goingToHome) {
-      // Salimos del home: animamos transición completa
-      setAnimationStage('closing');
-      setShowContent(false);
-    } else {
-      // Entramos al home o navegamos dentro de otras páginas: no animar
-      setAnimationStage('idle');
+    // Para evitar animación al montar la app por primera vez
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      setIsAnimating(false);
       setShowContent(true);
+      return;
     }
 
-    previousPath.current = location.pathname;
+    // Evitar animación si hay flag externo (como antes)
+    if (window.skipManualFade) {
+      setIsAnimating(false);
+      setShowContent(true);
+      window.skipManualFade = false;
+      return;
+    }
+
+    // Si es navegación normal, animar
+    setIsAnimating(true);
+    setShowContent(false);
+
+    const timer = setTimeout(() => {
+      setIsAnimating(false);
+      setShowContent(true);
+    }, 1000); // duración del overlay + buffer
+
+    return () => clearTimeout(timer);
   }, [location]);
 
   const isHome = location.pathname === '/';
@@ -48,19 +56,8 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlitchBackground />
-      {isHome && <Navbar />}
-      
-      {/* Solo renderizamos animación si está en closing o opening */}
-      {(animationStage === 'closing' || animationStage === 'opening') && (
-        <PageTransition
-          animationStage={animationStage}
-          setAnimationStage={setAnimationStage}
-          onOpeningComplete={() => {
-            setShowContent(true);
-            setAnimationStage('idle');
-          }}
-        />
-      )}
+      {isHome && <Navbar setIsAnimating={setIsAnimating} />}
+      <PageTransition isAnimating={isAnimating} />
 
       <div
         style={{
