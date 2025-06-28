@@ -5,12 +5,13 @@ const ContactContainer = styled.section`
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  padding: 100px 20px 40px; /* Espacio arriba para compensar el nav fijo */
+  padding: 80px 20px 40px; /* Ajustado: menos espacio arriba */
   color: white;
   border-radius: 10px;
   text-align: center;
   position: relative;
   z-index: 1;
+  min-height: 100vh; /* Asegura altura completa de pantalla */
 
   &::before {
     content: "";
@@ -30,7 +31,7 @@ const ContactContainer = styled.section`
   }
 
   @media (max-width: 1200px) {
-    padding: 80px 15px 30px;
+    padding: 70px 15px 30px;
     max-width: 90%;
   }
 
@@ -42,16 +43,16 @@ const ContactContainer = styled.section`
     font-family: ${(props) => props.theme.fontFamily.main};
     letter-spacing: 1.5px;
     margin-bottom: 20px;
-    font-size: 2rem;
+    font-size: 2.5rem;
     position: relative;
     z-index: 2;
 
     @media (max-width: 1200px) { 
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
 
     @media (max-width: 768px) { 
-      font-size: 1.5rem;
+      font-size: 1.6rem;
     }
   }
 
@@ -68,7 +69,7 @@ const ContactContainer = styled.section`
     }
 
     @media (max-width: 768px) { 
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
   }
 
@@ -128,3 +129,4 @@ const SocialLinks = styled.div`
 `;
 
 export { ContactContainer, InfoContainer, ContactInfo, Link, SocialLinks };
+
