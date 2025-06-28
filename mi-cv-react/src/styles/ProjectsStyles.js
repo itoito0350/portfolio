@@ -1,33 +1,30 @@
 import styled from 'styled-components';
 import interBackground from '../assets/inter.jpg';
-import { motion } from 'framer-motion';
 
 const ProjectsContainer = styled.section`
   position: relative;
   overflow: hidden;
-  padding: 100px 20px 40px;
+
   max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
+  margin: 1rem auto;
+  padding: 1rem 2rem 3rem; /* poco padding arriba, nada exagerado */
   color: white;
   border-radius: 10px;
-  scroll-margin-top: 120px;
+  text-align: center;
 
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background-image: url(${interBackground});
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     transform: rotate(180deg);
-    opacity: 0.2;
-    z-index: 0;
+    opacity: 0.15; /* fondo muy tenue */
     pointer-events: none;
+    z-index: 0;
   }
 
   > * {
@@ -38,8 +35,8 @@ const ProjectsContainer = styled.section`
   h2 {
     font-family: ${(props) => props.theme.fontFamily.main};
     letter-spacing: 1.5px;
-    margin-bottom: 20px;
-    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 2.2rem;
   }
 
   button {
@@ -56,43 +53,41 @@ const ProjectsContainer = styled.section`
   }
 
   @media (max-width: 768px) {
-    padding: 80px 15px 30px;
+    padding: 1rem 1rem 2rem;
 
     h2 {
-      font-size: 2rem;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
     }
   }
 `;
 
-const ProjectCard = styled(motion.div)`
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  transition: all 0.3s ease-in-out;
+const ProjectCard = styled.div`
+  background: transparent; /* sin cajas visibles */
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
   h3 {
     font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: #ffffff;
+    margin-bottom: 0.3rem;
+    color: white;
   }
 
   p {
     font-size: 1rem;
-    color: #b3b3b3;
+    color: #ccc;
   }
 
   a {
-    font-weight: bold;
     color: #4CAF50;
     text-decoration: underline;
+    font-weight: bold;
   }
 
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-    transform: translateY(-4px);
+  &:last-child {
+    border-bottom: none;
   }
 `;
 
 export { ProjectsContainer, ProjectCard };
+
