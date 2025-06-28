@@ -34,6 +34,13 @@ const ProjectsContainer = styled.section`
     animation: fadeOut 0.8s ease forwards;
   }
 
+  h2 {
+    font-family: ${(props) => props.theme.fontFamily.main};
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+  }
+
   button {
     margin-top: 2rem;
     padding: 0.6rem 1.5rem;
