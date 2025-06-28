@@ -67,9 +67,8 @@ const ProjectsContainer = styled.section`
 `;
 
 const ProjectCard = styled.div`
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid #4e847720;
-  border-radius: 12px;
+  background: transparent;
+  border: none;
   padding: 1.5rem;
   margin: 1rem 0;
   width: 100%;
