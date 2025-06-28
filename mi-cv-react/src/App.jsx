@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
-
+import './styles/App.css'; 
 import GlitchBackground from './components/GlitchBackground';
 import PageTransition from './components/PageTransition';
 import Contact from './pages/Contact';
@@ -14,45 +14,33 @@ import SkillsTicker from './components/SkillsTicker';
 
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
+import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [animationStage, setAnimationStage] = useState('idle'); // 'idle' | 'closing' | 'opening'
   const [showContent, setShowContent] = useState(false);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
-    if (isFirstLoad) {
-      // En la primera carga mostramos contenido sin animación de apertura
-      setShowContent(true);
-      setIsAnimating(false);
-      setIsFirstLoad(false);
-      return;
-    }
-
-    // En navegaciones posteriores, activamos animación de cierre
-    setIsAnimating(true);
+    // Cuando cambia la ruta, inicia animación de cierre
+    setAnimationStage('closing');
     setShowContent(false);
-
   }, [location]);
-
-  // Callback que se pasará a PageTransition para cuando termine la animación de apertura
-  const handleAnimationComplete = () => {
-    setShowContent(true);
-    setIsAnimating(false);
-  };
 
   const isHome = location.pathname === '/';
 
   return (
     <ThemeProvider theme={theme}>
       <GlitchBackground />
-      {isHome && <Navbar setIsAnimating={setIsAnimating} />}
+      {isHome && <Navbar />}
+      
       <PageTransition
-        isAnimating={isAnimating}
-        setIsAnimating={setIsAnimating}
-        isFirstLoad={isFirstLoad}
-        onAnimationComplete={handleAnimationComplete} // <--- callback aquí
+        animationStage={animationStage}
+        setAnimationStage={setAnimationStage}
+        onOpeningComplete={() => {
+          setShowContent(true);
+          setAnimationStage('idle');
+        }}
       />
 
       <div
@@ -83,3 +71,4 @@ const App = () => {
 };
 
 export default App;
+
