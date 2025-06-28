@@ -19,6 +19,7 @@ import './styles/index.css';
 const App = () => {
   const [isAnimating, setIsAnimating] = useState(true);
   const [showContent, setShowContent] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true); // NUEVO
   const location = useLocation();
 
   useEffect(() => {
@@ -32,6 +33,15 @@ const App = () => {
       return;
     }
 
+    if (isFirstLoad) {
+      // Primera carga: mostrar contenido sin animar apertura para evitar salto
+      setIsAnimating(false);
+      setShowContent(true);
+      setIsFirstLoad(false);
+      return;
+    }
+
+    // Para las siguientes navegaciones, hacer la animación normal
     setIsAnimating(true);
     setShowContent(false);
 
@@ -41,7 +51,7 @@ const App = () => {
     }, 800);
 
     return () => clearTimeout(timer);
-  }, [location]);
+  }, [location, isFirstLoad]);
 
   const isHome = location.pathname === '/';
 
