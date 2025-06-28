@@ -22,26 +22,25 @@ const App = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const skipTransition = window.skipManualFade;
-
-    if (skipTransition) {
-      setIsAnimating(false);
+    if (isFirstLoad) {
+      // En la primera carga mostramos contenido sin animación de apertura
       setShowContent(true);
-      window.skipManualFade = false;
+      setIsAnimating(false);
+      setIsFirstLoad(false);
       return;
     }
 
+    // En navegaciones posteriores, activamos animación de cierre
     setIsAnimating(true);
     setShowContent(false);
 
-    const timer = setTimeout(() => {
-      setIsAnimating(false);
-      setShowContent(true);
-      setIsFirstLoad(false); // Aquí marcamos que ya no es la primera carga
-    }, 800);
-
-    return () => clearTimeout(timer);
   }, [location]);
+
+  // Callback que se pasará a PageTransition para cuando termine la animación de apertura
+  const handleAnimationComplete = () => {
+    setShowContent(true);
+    setIsAnimating(false);
+  };
 
   const isHome = location.pathname === '/';
 
@@ -53,6 +52,7 @@ const App = () => {
         isAnimating={isAnimating}
         setIsAnimating={setIsAnimating}
         isFirstLoad={isFirstLoad}
+        onAnimationComplete={handleAnimationComplete} // <--- callback aquí
       />
 
       <div
