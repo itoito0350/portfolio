@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import './styles/App.css'; 
+import './styles/App.css';
 import GlitchBackground from './components/GlitchBackground';
 import PageTransition from './components/PageTransition';
 import Contact from './pages/Contact';
@@ -17,19 +17,15 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const location = useLocation();
   const [isAnimating, setIsAnimating] = useState(false);
-  const [showContent, setShowContent] = useState(true);
-  const [hasVisited, setHasVisited] = useState(false);
-  const [prevPath, setPrevPath] = useState(null);
+  const [showContent, setShowContent] = useState(false);
+  const location = useLocation();
+  const [firstLoad, setFirstLoad] = useState(true);
 
   useEffect(() => {
-    const currentPath = location.pathname;
-
-    // No animar si es primera carga o si vuelve al home
-    if (!hasVisited || (prevPath && currentPath === '/')) {
-      setHasVisited(true);
-      setPrevPath(currentPath);
+    if (firstLoad) {
+      setShowContent(true);
+      setFirstLoad(false);
       return;
     }
 
@@ -41,7 +37,6 @@ const App = () => {
       setShowContent(true);
     }, 800);
 
-    setPrevPath(currentPath);
     return () => clearTimeout(timer);
   }, [location]);
 
@@ -51,7 +46,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlitchBackground />
       {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      {isAnimating && <PageTransition isAnimating={isAnimating} />}
+      <PageTransition isAnimating={isAnimating} />
 
       <div
         style={{
@@ -89,5 +84,6 @@ const App = () => {
 };
 
 export default App;
+
 
 
