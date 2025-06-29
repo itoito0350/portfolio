@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // <-- para navegación programática
 import { 
   Nav, Logo, Title, Subtitle, Menu, MenuItem, MenuLink, 
   BurgerMenu, BurgerLines, MobileMenu 
@@ -7,16 +6,11 @@ import {
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
-  // Función para manejar clic en link y esperar animación antes de navegar
   const handleNavClick = (path) => {
-    setMenuOpen(false); // cerrar menú primero (esto activa la animación de cierre)
-    
-    // Esperamos 300ms que coincida con la duración del fade-out
-    setTimeout(() => {
-      navigate(path);
-    }, 300);
+    setMenuOpen(false);
+    window.skipManualFade = false; // Habilitar animación
+    window.nextRoute = path;       // Guardar ruta a navegar
   };
 
   return (
@@ -26,8 +20,9 @@ const Navbar = () => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
         onClick={() => {
-          if (menuOpen) setMenuOpen(false);
-          navigate("/");
+          setMenuOpen(false);
+          window.skipManualFade = false;
+          window.nextRoute = "/";
         }}
         style={{ cursor: "pointer" }}
       >
@@ -51,17 +46,17 @@ const Navbar = () => {
 
       <Menu>
         <MenuItem>
-          <MenuLink as="div" onClick={() => navigate("/about")}>
+          <MenuLink as="div" onClick={() => handleNavClick("/about")}>
             <span>ABOUT</span>
           </MenuLink>
         </MenuItem>
         <MenuItem>
-          <MenuLink as="div" onClick={() => navigate("/projects")}>
+          <MenuLink as="div" onClick={() => handleNavClick("/projects")}>
             <span>PROJECTS</span>
           </MenuLink>
         </MenuItem>
         <MenuItem>
-          <MenuLink as="div" onClick={() => navigate("/contact")}>
+          <MenuLink as="div" onClick={() => handleNavClick("/contact")}>
             <span>CONTACT</span>
           </MenuLink>
         </MenuItem>
@@ -89,3 +84,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
