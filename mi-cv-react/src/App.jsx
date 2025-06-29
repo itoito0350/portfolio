@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import './styles/App.css'; 
+import './styles/App.css';
 import GlitchBackground from './components/GlitchBackground';
 import PageTransition from './components/PageTransition';
 import Contact from './pages/Contact';
@@ -17,20 +17,17 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(true);
-  const [showContent, setShowContent] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false); // << empezaba en false
+  const [showContent, setShowContent] = useState(true); // << mostraba contenido de entrada
   const location = useLocation();
 
   useEffect(() => {
-    const skipTransition = window.skipManualFade;
-
-    if (skipTransition) {
-      setIsAnimating(false);
-      setShowContent(true);
-      window.skipManualFade = false;
+    if (location.pathname === '/') {
+      // No animar al volver al home
       return;
     }
 
+    // Animación solo en navegación
     setIsAnimating(true);
     setShowContent(false);
 
@@ -66,7 +63,7 @@ const App = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
             >
               <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Header />} />
@@ -86,7 +83,6 @@ const App = () => {
 };
 
 export default App;
-
 
 
 
