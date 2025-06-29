@@ -17,17 +17,23 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(true);
+  // En vez de true, empieza false para no animar en la primera carga
+  const [isAnimating, setIsAnimating] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
+    // Si no está definida, inicializamos para que la primera carga no anime
+    if (window.skipManualFade === undefined) {
+      window.skipManualFade = true;
+    }
+
     const skipTransition = window.skipManualFade;
 
     if (skipTransition) {
       setIsAnimating(false);
       setShowContent(true);
-      window.skipManualFade = false;
+      window.skipManualFade = false; // Luego ya no saltamos más
       return;
     }
 
@@ -86,4 +92,3 @@ const App = () => {
 };
 
 export default App;
-
