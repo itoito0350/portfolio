@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
 import { 
   Nav, Logo, Title, Subtitle, Menu, MenuItem, MenuLink, 
   BurgerMenu, BurgerLines, MobileMenu 
@@ -12,11 +12,9 @@ const Navbar = () => {
   const handleNavClick = (path) => {
     setMenuOpen(false);
 
-    // Pequeño delay para permitir la animación visual (opcional)
     setTimeout(() => {
-      window.skipManualFade = false; // habilita transición
       navigate(path);
-    }, 100);
+    }, 300);
   };
 
   return (
@@ -26,7 +24,7 @@ const Navbar = () => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
         onClick={() => {
-          window.skipManualFade = false;
+          if (menuOpen) setMenuOpen(false);
           navigate("/");
         }}
         style={{ cursor: "pointer" }}
@@ -51,17 +49,17 @@ const Navbar = () => {
 
       <Menu>
         <MenuItem>
-          <MenuLink as="div" onClick={() => handleNavClick("/about")}>
+          <MenuLink as="div" onClick={() => navigate("/about")}>
             <span>ABOUT</span>
           </MenuLink>
         </MenuItem>
         <MenuItem>
-          <MenuLink as="div" onClick={() => handleNavClick("/projects")}>
+          <MenuLink as="div" onClick={() => navigate("/projects")}>
             <span>PROJECTS</span>
           </MenuLink>
         </MenuItem>
         <MenuItem>
-          <MenuLink as="div" onClick={() => handleNavClick("/contact")}>
+          <MenuLink as="div" onClick={() => navigate("/contact")}>
             <span>CONTACT</span>
           </MenuLink>
         </MenuItem>
