@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import './styles/App.css'; 
@@ -17,20 +17,19 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
+  const location = useLocation();
   const [isAnimating, setIsAnimating] = useState(false);
   const [showContent, setShowContent] = useState(true);
-  const location = useLocation();
-  const isFirstLoad = useRef(true);
-  const prevPath = useRef(null);
+  const [hasVisited, setHasVisited] = useState(false);
+  const [prevPath, setPrevPath] = useState(null);
 
   useEffect(() => {
-    // No animar si es la primera carga o si se vuelve al home
     const currentPath = location.pathname;
-    const comingBackToHome = currentPath === '/' && prevPath.current !== null;
 
-    if (isFirstLoad.current || comingBackToHome) {
-      isFirstLoad.current = false;
-      prevPath.current = currentPath;
+    // No animar si es primera carga o si vuelve al home
+    if (!hasVisited || (prevPath && currentPath === '/')) {
+      setHasVisited(true);
+      setPrevPath(currentPath);
       return;
     }
 
@@ -42,7 +41,7 @@ const App = () => {
       setShowContent(true);
     }, 800);
 
-    prevPath.current = currentPath;
+    setPrevPath(currentPath);
     return () => clearTimeout(timer);
   }, [location]);
 
@@ -70,7 +69,7 @@ const App = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
             >
               <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Header />} />
