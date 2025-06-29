@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import './styles/App.css'; 
@@ -20,11 +20,17 @@ const App = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const location = useLocation();
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const isFirstLoad = useRef(true);
+  const prevPath = useRef(null);
 
   useEffect(() => {
-    if (isFirstLoad) {
-      setIsFirstLoad(false);
+    // No animar si es la primera carga o si se vuelve al home
+    const currentPath = location.pathname;
+    const comingBackToHome = currentPath === '/' && prevPath.current !== null;
+
+    if (isFirstLoad.current || comingBackToHome) {
+      isFirstLoad.current = false;
+      prevPath.current = currentPath;
       return;
     }
 
@@ -36,6 +42,7 @@ const App = () => {
       setShowContent(true);
     }, 800);
 
+    prevPath.current = currentPath;
     return () => clearTimeout(timer);
   }, [location]);
 
@@ -45,7 +52,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlitchBackground />
       {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      {!isFirstLoad && <PageTransition isAnimating={isAnimating} />}
+      {isAnimating && <PageTransition isAnimating={isAnimating} />}
 
       <div
         style={{
@@ -83,4 +90,5 @@ const App = () => {
 };
 
 export default App;
+
 
