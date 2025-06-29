@@ -4,6 +4,8 @@ import { HashRouter } from 'react-router-dom'; // 👈 Cambiar aquí
 import App from './App.jsx';
 import './styles/index.css';
 
+window.skipManualFade = true;
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <HashRouter> {/* 👈 Y aquí */}
     <App />
