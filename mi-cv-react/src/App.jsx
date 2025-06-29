@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import './styles/App.css'; 
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import './styles/App.css';
 import GlitchBackground from './components/GlitchBackground';
 import PageTransition from './components/PageTransition';
 import Contact from './pages/Contact';
@@ -11,20 +11,21 @@ import Skills from './pages/Skills';
 import Projects from './pages/Projects';
 import Navbar from './components/Navbar';
 import SkillsTicker from './components/SkillsTicker';
-
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(true);
-  const [showContent, setShowContent] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [showContent, setShowContent] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const skipTransition = window.skipManualFade;
+    const nextRoute = window.nextRoute;
+    const skip = window.skipManualFade;
 
-    if (skipTransition) {
+    if (!nextRoute || skip) {
       setIsAnimating(false);
       setShowContent(true);
       window.skipManualFade = false;
@@ -37,7 +38,9 @@ const App = () => {
     const timer = setTimeout(() => {
       setIsAnimating(false);
       setShowContent(true);
-    }, 800);
+      navigate(nextRoute);
+      window.nextRoute = null;
+    }, 800); // animación de cortina
 
     return () => clearTimeout(timer);
   }, [location]);
@@ -47,8 +50,8 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlitchBackground />
-      {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
+      {isHome && <Navbar />}
+      <PageTransition isAnimating={isAnimating} />
 
       <div
         style={{
@@ -86,7 +89,6 @@ const App = () => {
 };
 
 export default App;
-
 
 
 
