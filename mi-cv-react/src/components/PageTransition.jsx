@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TransitionContainer, TopLayer, BottomLayer, GlitchLine } from "../styles/PageTransitionStyles";
 
-const PageTransition = ({ isClosing, isOpening }) => {
+const PageTransition = ({ isAnimating }) => {
   const [lines, setLines] = useState([]);
 
   useEffect(() => {
@@ -29,12 +29,14 @@ const PageTransition = ({ isClosing, isOpening }) => {
     <TransitionContainer>
       <TopLayer
         initial={{ y: '-100%' }}
-        animate={{ y: isClosing ? '0%' : isOpening ? '-100%' : '-100%' }}
+        animate={{ y: isAnimating ? '0%' : '-100%' }}
+        exit={{ y: '-100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
       <BottomLayer
         initial={{ y: '100%' }}
-        animate={{ y: isClosing ? '0%' : isOpening ? '100%' : '100%' }}
+        animate={{ y: isAnimating ? '0%' : '100%' }}
+        exit={{ y: '100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
 
@@ -44,12 +46,10 @@ const PageTransition = ({ isClosing, isOpening }) => {
           className={line.randomDirection}
           animate={{
             opacity: [0, 0.4, 1, 0.4, 0],
-            width: line.randomDirection === 'horizontal'
-              ? (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%'])
-              : undefined,
-            height: line.randomDirection === 'vertical'
-              ? (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%'])
-              : undefined,
+            width: line.randomDirection === 'horizontal' ? 
+              (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
+            height: line.randomDirection === 'vertical' ? 
+              (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
           }}
           transition={{
             duration: 3 + Math.random(),
