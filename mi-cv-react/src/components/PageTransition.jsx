@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { TransitionContainer, TopLayer, BottomLayer, GlitchLine } from "../styles/PageTransitionStyles";
 
-const PageTransition = ({ isAnimating }) => {
+const PageTransition = ({ isClosing, isOpening }) => {
   const [lines, setLines] = useState([]);
-  const [firstLoad, setFirstLoad] = useState(true);
 
   useEffect(() => {
     const generateRandomLine = () => {
@@ -26,24 +25,16 @@ const PageTransition = ({ isAnimating }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (!isAnimating && firstLoad) {
-      setFirstLoad(false);
-    }
-  }, [isAnimating, firstLoad]);
-
   return (
     <TransitionContainer>
       <TopLayer
-        initial={firstLoad ? false : { y: '-100%' }}  // No initial anim on first load
-        animate={isAnimating ? { y: '0%' } : { y: '-100%' }}
-        exit={{ y: '-100%' }}
+        initial={{ y: '-100%' }}
+        animate={{ y: isClosing ? '0%' : isOpening ? '-100%' : '-100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
       <BottomLayer
-        initial={firstLoad ? false : { y: '100%' }} // No initial anim on first load
-        animate={isAnimating ? { y: '0%' } : { y: '100%' }}
-        exit={{ y: '100%' }}
+        initial={{ y: '100%' }}
+        animate={{ y: isClosing ? '0%' : isOpening ? '100%' : '100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
 
@@ -80,6 +71,7 @@ const PageTransition = ({ isAnimating }) => {
 };
 
 export default PageTransition;
+
 
 
 
