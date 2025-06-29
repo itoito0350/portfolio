@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import './styles/App.css'; 
@@ -17,39 +17,29 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
+  const [isAnimating, setIsAnimating] = useState(true);
+  const [showContent, setShowContent] = useState(false);
   const location = useLocation();
 
-  const [isClosing, setIsClosing] = useState(false);
-  const [isOpening, setIsOpening] = useState(false);
-  const [showContent, setShowContent] = useState(true);
-
-  // Guarda la ruta actual para detectar cambios y evitar animación en la primera carga
-  const currentPath = useRef('');
-
   useEffect(() => {
-    // Primera carga: solo guarda ruta y no hace animación
-    if (!currentPath.current) {
-      currentPath.current = location.pathname;
+    const skipTransition = window.skipManualFade;
+
+    if (skipTransition) {
+      setIsAnimating(false);
+      setShowContent(true);
+      window.skipManualFade = false;
       return;
     }
 
-    if (location.pathname !== currentPath.current) {
-      setIsClosing(true);
-      setShowContent(false);
+    setIsAnimating(true);
+    setShowContent(false);
 
-      const timeout = setTimeout(() => {
-        currentPath.current = location.pathname;
-        setIsClosing(false);
-        setIsOpening(true);
-        setShowContent(true);
+    const timer = setTimeout(() => {
+      setIsAnimating(false);
+      setShowContent(true);
+    }, 800);
 
-        setTimeout(() => {
-          setIsOpening(false);
-        }, 800);
-      }, 800);
-
-      return () => clearTimeout(timeout);
-    }
+    return () => clearTimeout(timer);
   }, [location]);
 
   const isHome = location.pathname === '/';
@@ -57,9 +47,8 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlitchBackground />
-      {isHome && <Navbar />}
-
-      <PageTransition isClosing={isClosing} isOpening={isOpening} />
+      {isHome && <Navbar setIsAnimating={setIsAnimating} />}
+      <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
 
       <div
         style={{
@@ -97,3 +86,4 @@ const App = () => {
 };
 
 export default App;
+
