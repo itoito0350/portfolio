@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import './styles/App.css';
+import './styles/App.css'; 
 import GlitchBackground from './components/GlitchBackground';
 import PageTransition from './components/PageTransition';
 import Contact from './pages/Contact';
@@ -17,15 +17,17 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(true);
   const [showContent, setShowContent] = useState(false);
   const location = useLocation();
-  const [firstLoad, setFirstLoad] = useState(true);
 
   useEffect(() => {
-    if (firstLoad) {
+    const skipTransition = window.skipManualFade;
+
+    if (skipTransition) {
+      setIsAnimating(false);
       setShowContent(true);
-      setFirstLoad(false);
+      window.skipManualFade = false;
       return;
     }
 
@@ -46,7 +48,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlitchBackground />
       {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      <PageTransition isAnimating={isAnimating} />
+      <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
 
       <div
         style={{
@@ -64,7 +66,7 @@ const App = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
               <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Header />} />
@@ -84,6 +86,7 @@ const App = () => {
 };
 
 export default App;
+
 
 
 
