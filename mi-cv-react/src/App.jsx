@@ -17,17 +17,14 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(true);
-  const [showContent, setShowContent] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [showContent, setShowContent] = useState(true);
   const location = useLocation();
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   useEffect(() => {
-    const skipTransition = window.skipManualFade;
-
-    if (skipTransition) {
-      setIsAnimating(false);
-      setShowContent(true);
-      window.skipManualFade = false;
+    if (isFirstLoad) {
+      setIsFirstLoad(false);
       return;
     }
 
@@ -48,7 +45,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlitchBackground />
       {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
+      {!isFirstLoad && <PageTransition isAnimating={isAnimating} />}
 
       <div
         style={{
