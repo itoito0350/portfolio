@@ -3,6 +3,7 @@ import { TransitionContainer, TopLayer, BottomLayer, GlitchLine } from "../style
 
 const PageTransition = ({ isAnimating }) => {
   const [lines, setLines] = useState([]);
+  const [firstLoad, setFirstLoad] = useState(true);
 
   useEffect(() => {
     const generateRandomLine = () => {
@@ -25,17 +26,23 @@ const PageTransition = ({ isAnimating }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!isAnimating && firstLoad) {
+      setFirstLoad(false);
+    }
+  }, [isAnimating, firstLoad]);
+
   return (
     <TransitionContainer>
       <TopLayer
-        initial={{ y: '-100%' }}
-        animate={{ y: isAnimating ? '0%' : '-100%' }}
+        initial={firstLoad ? false : { y: '-100%' }}  // No initial anim on first load
+        animate={isAnimating ? { y: '0%' } : { y: '-100%' }}
         exit={{ y: '-100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
       <BottomLayer
-        initial={{ y: '100%' }}
-        animate={{ y: isAnimating ? '0%' : '100%' }}
+        initial={firstLoad ? false : { y: '100%' }} // No initial anim on first load
+        animate={isAnimating ? { y: '0%' } : { y: '100%' }}
         exit={{ y: '100%' }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
@@ -46,10 +53,12 @@ const PageTransition = ({ isAnimating }) => {
           className={line.randomDirection}
           animate={{
             opacity: [0, 0.4, 1, 0.4, 0],
-            width: line.randomDirection === 'horizontal' ? 
-              (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
-            height: line.randomDirection === 'vertical' ? 
-              (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%']) : undefined,
+            width: line.randomDirection === 'horizontal'
+              ? (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%'])
+              : undefined,
+            height: line.randomDirection === 'vertical'
+              ? (line.randomOrigin > 0.5 ? ['0%', '100%'] : ['100%', '0%'])
+              : undefined,
           }}
           transition={{
             duration: 3 + Math.random(),
@@ -71,6 +80,7 @@ const PageTransition = ({ isAnimating }) => {
 };
 
 export default PageTransition;
+
 
 
 
