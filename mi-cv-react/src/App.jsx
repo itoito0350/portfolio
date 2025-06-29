@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import './styles/App.css';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import GlitchBackground from './components/GlitchBackground';
 import PageTransition from './components/PageTransition';
 import Contact from './pages/Contact';
@@ -13,19 +12,17 @@ import Navbar from './components/Navbar';
 import SkillsTicker from './components/SkillsTicker';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
+import './styles/App.css';
 import './styles/index.css';
 
 const App = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const nextRoute = window.nextRoute;
     const skip = window.skipManualFade;
-
-    if (!nextRoute || skip) {
+    if (skip) {
       setIsAnimating(false);
       setShowContent(true);
       window.skipManualFade = false;
@@ -35,14 +32,12 @@ const App = () => {
     setIsAnimating(true);
     setShowContent(false);
 
-    const timer = setTimeout(() => {
+    const timeout = setTimeout(() => {
       setIsAnimating(false);
       setShowContent(true);
-      navigate(nextRoute);
-      window.nextRoute = null;
-    }, 800); // animación de cortina
+    }, 800);
 
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timeout);
   }, [location]);
 
   const isHome = location.pathname === '/';
@@ -50,18 +45,15 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlitchBackground />
-      {isHome && <Navbar />}
+      {isHome && <Navbar setIsAnimating={setIsAnimating} />}
       <PageTransition isAnimating={isAnimating} />
-
-      <div
-        style={{
-          marginTop: isHome ? '200px' : '40px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          maxWidth: '1200px',
-          padding: '0 1rem',
-        }}
-      >
+      <div style={{
+        marginTop: isHome ? '200px' : '40px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        maxWidth: '1200px',
+        padding: '0 1rem',
+      }}>
         <AnimatePresence mode="wait" initial={false}>
           {showContent && (
             <motion.div
@@ -82,13 +74,11 @@ const App = () => {
           )}
         </AnimatePresence>
       </div>
-
       <SkillsTicker />
     </ThemeProvider>
   );
 };
 
 export default App;
-
 
 
