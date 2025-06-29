@@ -1,21 +1,27 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // <-- para navegación programática
-import { 
-  Nav, Logo, Title, Subtitle, Menu, MenuItem, MenuLink, 
-  BurgerMenu, BurgerLines, MobileMenu 
+import { useNavigate } from "react-router-dom";
+import {
+  Nav,
+  Logo,
+  Title,
+  Subtitle,
+  Menu,
+  MenuItem,
+  MenuLink,
+  BurgerMenu,
+  BurgerLines,
+  MobileMenu
 } from "../styles/NavbarStyles";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Función para manejar clic en link y esperar animación antes de navegar
+  // Función para navegación con pequeño delay (para animación menú móvil)
   const handleNavClick = (path) => {
-    setMenuOpen(false); // cerrar menú primero (esto activa la animación de cierre)
-    
-    // Esperamos 300ms que coincida con la duración del fade-out
+    setMenuOpen(false); // Cierra el menú
     setTimeout(() => {
-      navigate(path);
+      navigate(path); // Navega tras 300ms
     }, 300);
   };
 
