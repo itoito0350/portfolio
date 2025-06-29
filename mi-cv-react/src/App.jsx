@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import './styles/App.css'; 
@@ -17,35 +17,39 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  // En vez de true, empieza false para no animar en la primera carga
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [showContent, setShowContent] = useState(false);
   const location = useLocation();
 
+  const [isClosing, setIsClosing] = useState(false);
+  const [isOpening, setIsOpening] = useState(false);
+  const [showContent, setShowContent] = useState(true);
+
+  // Guarda la ruta actual para detectar cambios y evitar animación en la primera carga
+  const currentPath = useRef('');
+
   useEffect(() => {
-    // Si no está definida, inicializamos para que la primera carga no anime
-    if (window.skipManualFade === undefined) {
-      window.skipManualFade = true;
-    }
-
-    const skipTransition = window.skipManualFade;
-
-    if (skipTransition) {
-      setIsAnimating(false);
-      setShowContent(true);
-      window.skipManualFade = false; // Luego ya no saltamos más
+    // Primera carga: solo guarda ruta y no hace animación
+    if (!currentPath.current) {
+      currentPath.current = location.pathname;
       return;
     }
 
-    setIsAnimating(true);
-    setShowContent(false);
+    if (location.pathname !== currentPath.current) {
+      setIsClosing(true);
+      setShowContent(false);
 
-    const timer = setTimeout(() => {
-      setIsAnimating(false);
-      setShowContent(true);
-    }, 800);
+      const timeout = setTimeout(() => {
+        currentPath.current = location.pathname;
+        setIsClosing(false);
+        setIsOpening(true);
+        setShowContent(true);
 
-    return () => clearTimeout(timer);
+        setTimeout(() => {
+          setIsOpening(false);
+        }, 800);
+      }, 800);
+
+      return () => clearTimeout(timeout);
+    }
   }, [location]);
 
   const isHome = location.pathname === '/';
@@ -53,8 +57,9 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlitchBackground />
-      {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
+      {isHome && <Navbar />}
+
+      <PageTransition isClosing={isClosing} isOpening={isOpening} />
 
       <div
         style={{
