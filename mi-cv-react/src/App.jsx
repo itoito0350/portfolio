@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import './styles/App.css'; 
 import GlitchBackground from './components/GlitchBackground';
 import PageTransition from './components/PageTransition';
 import Contact from './pages/Contact';
@@ -10,19 +11,20 @@ import Skills from './pages/Skills';
 import Projects from './pages/Projects';
 import Navbar from './components/Navbar';
 import SkillsTicker from './components/SkillsTicker';
+
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
-import './styles/App.css';
 import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [showContent, setShowContent] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(true);
+  const [showContent, setShowContent] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    const skip = window.skipManualFade;
-    if (skip) {
+    const skipTransition = window.skipManualFade;
+
+    if (skipTransition) {
       setIsAnimating(false);
       setShowContent(true);
       window.skipManualFade = false;
@@ -32,12 +34,12 @@ const App = () => {
     setIsAnimating(true);
     setShowContent(false);
 
-    const timeout = setTimeout(() => {
+    const timer = setTimeout(() => {
       setIsAnimating(false);
       setShowContent(true);
     }, 800);
 
-    return () => clearTimeout(timeout);
+    return () => clearTimeout(timer);
   }, [location]);
 
   const isHome = location.pathname === '/';
@@ -46,14 +48,17 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlitchBackground />
       {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      <PageTransition isAnimating={isAnimating} />
-      <div style={{
-        marginTop: isHome ? '200px' : '40px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        maxWidth: '1200px',
-        padding: '0 1rem',
-      }}>
+      <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
+
+      <div
+        style={{
+          marginTop: isHome ? '200px' : '40px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          maxWidth: '1200px',
+          padding: '0 1rem',
+        }}
+      >
         <AnimatePresence mode="wait" initial={false}>
           {showContent && (
             <motion.div
@@ -74,11 +79,13 @@ const App = () => {
           )}
         </AnimatePresence>
       </div>
+
       <SkillsTicker />
     </ThemeProvider>
   );
 };
 
 export default App;
+
 
 
