@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   Nav, Logo, Title, Subtitle, Menu, MenuItem, MenuLink, 
   BurgerMenu, BurgerLines, MobileMenu 
@@ -6,11 +7,16 @@ import {
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleNavClick = (path) => {
     setMenuOpen(false);
-    window.skipManualFade = false; // Habilitar animación
-    window.nextRoute = path;       // Guardar ruta a navegar
+
+    // Pequeño delay para permitir la animación visual (opcional)
+    setTimeout(() => {
+      window.skipManualFade = false; // habilita transición
+      navigate(path);
+    }, 100);
   };
 
   return (
@@ -20,9 +26,8 @@ const Navbar = () => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
         onClick={() => {
-          setMenuOpen(false);
           window.skipManualFade = false;
-          window.nextRoute = "/";
+          navigate("/");
         }}
         style={{ cursor: "pointer" }}
       >
