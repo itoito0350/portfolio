@@ -22,22 +22,24 @@ const App = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname === '/') {
-      // No animar al volver al home
-      return;
-    }
+  if (location.pathname === '/') {
+    // No animar ni ocultar contenido al entrar o volver a home
+    setIsAnimating(false);
+    setShowContent(true);
+    return;
+  }
 
-    // Animación solo en navegación
-    setIsAnimating(true);
-    setShowContent(false);
+  // Animación solo al navegar fuera del home
+  setIsAnimating(true);
+  setShowContent(false);
 
-    const timer = setTimeout(() => {
-      setIsAnimating(false);
-      setShowContent(true);
-    }, 800);
+  const timer = setTimeout(() => {
+    setIsAnimating(false);
+    setShowContent(true);
+  }, 800); // Duración animación, ajusta si quieres
 
-    return () => clearTimeout(timer);
-  }, [location]);
+  return () => clearTimeout(timer);
+}, [location]);
 
   const isHome = location.pathname === '/';
 
