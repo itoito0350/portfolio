@@ -194,7 +194,7 @@ Please change the parent <Route path="${C}"> to <Route path="${C==="/"?"*":`${C}
   background: #000; /* Puedes personalizar el color aquí */
   z-index: 9999;
   pointer-events: none;
-`,GI=({stage:i,setStage:e})=>{const t=i==="closing"||i==="opening",n=i==="closing";return $.useEffect(()=>{if(i==="closing"){const r=setTimeout(()=>{e("changing")},1e3);return()=>clearTimeout(r)}},[i,e]),le.jsx(z3,{mode:"wait",children:t&&le.jsx(WI,{initial:{height:n?"0%":"100%",top:"50%",bottom:"50%"},animate:{height:"100%",top:"0%",bottom:"0%"},exit:{height:"0%",top:"50%",bottom:"50%"},transition:{duration:1,ease:"easeInOut"}},"page-transition")})},r_="/portfolio/assets/inter-DpIuXbv4.jpg",jI=Jt.section`
+`,GI=({stage:i})=>{const e=i==="closing"||i==="opening",t=i==="closing";return le.jsx(z3,{mode:"wait",children:e&&le.jsx(WI,{initial:{height:t?"0%":"100%",top:"50%",bottom:"50%"},animate:{height:"100%",top:"0%",bottom:"0%"},exit:{height:"0%",top:"50%",bottom:"50%"},transition:{duration:1,ease:"easeInOut"}},"page-transition")})},r_="/portfolio/assets/inter-DpIuXbv4.jpg",jI=Jt.section`
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
