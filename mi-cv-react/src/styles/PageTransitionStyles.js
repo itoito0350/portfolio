@@ -79,4 +79,14 @@ const GlitchLine = styled(motion.div)`
     top: 0;
   }
 `;
-export { TransitionContainer, TopLayer, BottomLayer, GlitchLine };
+export const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000; /* Puedes personalizar el color aquí */
+  z-index: 9999;
+  pointer-events: none;
+`;
+export { TransitionContainer, TopLayer, BottomLayer, GlitchLine, Overlay };
