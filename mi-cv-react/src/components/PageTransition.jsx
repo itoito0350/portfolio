@@ -76,15 +76,15 @@ const PageTransition = ({ isAnimating }) => {
             delay: Math.random() * 2,
           }}
           style={{
-            left: line.randomDirection === 'vertical' ? ${line.randomX}px : 0,
-            top: line.randomDirection === 'horizontal' ? ${line.randomY}px : 0,
+            left: line.randomDirection === 'vertical' ? `${line.randomX}px` : 0,
+            top: line.randomDirection === 'horizontal' ? `${line.randomY}px` : 0,
             width:
               line.randomDirection === 'horizontal'
-                ? ${line.randomLength}px
+                ? `${line.randomLength}px`
                 : '1px',
             height:
               line.randomDirection === 'vertical'
-                ? ${line.randomLength}px
+                ? `${line.randomLength}px`
                 : '1px',
           }}
         />
@@ -94,7 +94,6 @@ const PageTransition = ({ isAnimating }) => {
 };
 
 export default PageTransition;
-
 
 
 
