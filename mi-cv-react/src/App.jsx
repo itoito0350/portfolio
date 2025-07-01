@@ -20,34 +20,37 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [stage, setStage] = useState('idle'); // idle, closing, changing, opening
+  const [stage, setStage] = useState('idle'); // 'idle', 'closing', 'changing', 'opening'
   const [nextPath, setNextPath] = useState(null);
+  const [showContent, setShowContent] = useState(true);
+
   const isHome = location.pathname === '/';
+
+  const onNavigate = (path) => {
+    if (path !== location.pathname && stage === 'idle') {
+      setNextPath(path);
+      setStage('closing');
+      setShowContent(false);
+    }
+  };
 
   useEffect(() => {
     if (stage === 'changing' && nextPath) {
       navigate(nextPath);
       setStage('opening');
-      setNextPath(null);
     } else if (stage === 'opening') {
       const timeout = setTimeout(() => {
         setStage('idle');
-      }, 1000);
+        setShowContent(true);
+      }, 1000); // Debe coincidir con la duración de la animación
       return () => clearTimeout(timeout);
     }
   }, [stage, nextPath, navigate]);
 
-  const handleNavigate = (path) => {
-    if (path !== location.pathname && stage === 'idle') {
-      setStage('closing');
-      setNextPath(path);
-    }
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <GlitchBackground />
-      <Navbar onNavigate={handleNavigate} />
+      <Navbar onNavigate={onNavigate} />
       <PageTransition stage={stage} setStage={setStage} />
 
       <div
@@ -60,7 +63,7 @@ const App = () => {
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
-          {stage !== 'closing' && (
+          {showContent && (
             <motion.div
               key={location.pathname}
               initial={{ opacity: 0, y: 20 }}
@@ -86,3 +89,4 @@ const App = () => {
 };
 
 export default App;
+
