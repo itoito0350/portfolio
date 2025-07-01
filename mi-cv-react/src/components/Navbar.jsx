@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Nav,
   Logo,
@@ -13,15 +12,13 @@ import {
   MobileMenu
 } from "../styles/NavbarStyles";
 
-const Navbar = () => {
+const Navbar = ({ onNavigate }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
-  // Función para navegación con pequeño delay (para animación menú móvil)
   const handleNavClick = (path) => {
-    setMenuOpen(false); // Cierra el menú
+    setMenuOpen(false);
     setTimeout(() => {
-      navigate(path); // Navega tras 300ms
+      onNavigate(path);
     }, 300);
   };
 
@@ -33,7 +30,7 @@ const Navbar = () => {
         transition={{ duration: 1.2, ease: "easeOut" }}
         onClick={() => {
           if (menuOpen) setMenuOpen(false);
-          navigate("/");
+          onNavigate("/");
         }}
         style={{ cursor: "pointer" }}
       >
@@ -57,17 +54,17 @@ const Navbar = () => {
 
       <Menu>
         <MenuItem>
-          <MenuLink as="div" onClick={() => navigate("/about")}>
+          <MenuLink as="div" onClick={() => onNavigate("/about")}>
             <span>ABOUT</span>
           </MenuLink>
         </MenuItem>
         <MenuItem>
-          <MenuLink as="div" onClick={() => navigate("/projects")}>
+          <MenuLink as="div" onClick={() => onNavigate("/projects")}>
             <span>PROJECTS</span>
           </MenuLink>
         </MenuItem>
         <MenuItem>
-          <MenuLink as="div" onClick={() => navigate("/contact")}>
+          <MenuLink as="div" onClick={() => onNavigate("/contact")}>
             <span>CONTACT</span>
           </MenuLink>
         </MenuItem>
