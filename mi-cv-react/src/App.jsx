@@ -11,6 +11,7 @@ import Skills from './pages/Skills';
 import Projects from './pages/Projects';
 import Navbar from './components/Navbar';
 import SkillsTicker from './components/SkillsTicker';
+
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
 import './styles/index.css';
@@ -19,35 +20,35 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [transitionStage, setTransitionStage] = useState('idle'); // 'idle', 'closing', 'changing', 'opening'
-  const [pendingPath, setPendingPath] = useState(null);
-
-  const handleNavigate = (path) => {
-    if (transitionStage !== 'idle') return;
-    setPendingPath(path);
-    setTransitionStage('closing');
-  };
+  const [stage, setStage] = useState('idle'); // idle, closing, changing, opening
+  const [nextPath, setNextPath] = useState(null);
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
-    if (transitionStage === 'changing' && pendingPath) {
-      navigate(pendingPath);
-      setPendingPath(null);
-      setTimeout(() => setTransitionStage('opening'), 100); // esperar un frame
-    }
-
-    if (transitionStage === 'opening') {
-      const timeout = setTimeout(() => setTransitionStage('idle'), 1200);
+    if (stage === 'changing' && nextPath) {
+      navigate(nextPath);
+      setStage('opening');
+      setNextPath(null);
+    } else if (stage === 'opening') {
+      const timeout = setTimeout(() => {
+        setStage('idle');
+      }, 1000);
       return () => clearTimeout(timeout);
     }
-  }, [transitionStage, pendingPath, navigate]);
+  }, [stage, nextPath, navigate]);
 
-  const isHome = location.pathname === '/';
+  const handleNavigate = (path) => {
+    if (path !== location.pathname && stage === 'idle') {
+      setStage('closing');
+      setNextPath(path);
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <GlitchBackground />
-      {isHome && <Navbar onNavigate={handleNavigate} />}
-      <PageTransition stage={transitionStage} setStage={setTransitionStage} />
+      <Navbar onNavigate={handleNavigate} />
+      <PageTransition stage={stage} setStage={setStage} />
 
       <div
         style={{
@@ -59,7 +60,7 @@ const App = () => {
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
-          {transitionStage !== 'closing' && (
+          {stage !== 'closing' && (
             <motion.div
               key={location.pathname}
               initial={{ opacity: 0, y: 20 }}
