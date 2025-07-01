@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import './styles/App.css';
 import GlitchBackground from './components/GlitchBackground';
 import PageTransition from './components/PageTransition';
@@ -11,41 +11,43 @@ import Skills from './pages/Skills';
 import Projects from './pages/Projects';
 import Navbar from './components/Navbar';
 import SkillsTicker from './components/SkillsTicker';
-
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(false); // << empezaba en false
-  const [showContent, setShowContent] = useState(true); // << mostraba contenido de entrada
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const [transitionStage, setTransitionStage] = useState('idle'); // 'idle', 'closing', 'changing', 'opening'
+  const [pendingPath, setPendingPath] = useState(null);
+
+  const handleNavigate = (path) => {
+    if (transitionStage !== 'idle') return;
+    setPendingPath(path);
+    setTransitionStage('closing');
+  };
 
   useEffect(() => {
-    if (location.pathname === '/') {
-      // No animar al volver al home
-      return;
+    if (transitionStage === 'changing' && pendingPath) {
+      navigate(pendingPath);
+      setPendingPath(null);
+      setTimeout(() => setTransitionStage('opening'), 100); // esperar un frame
     }
 
-    // Animación solo en navegación
-    setIsAnimating(true);
-    setShowContent(false);
-
-    const timer = setTimeout(() => {
-      setIsAnimating(false);
-      setShowContent(true);
-    }, 800);
-
-    return () => clearTimeout(timer);
-  }, [location]);
+    if (transitionStage === 'opening') {
+      const timeout = setTimeout(() => setTransitionStage('idle'), 1200);
+      return () => clearTimeout(timeout);
+    }
+  }, [transitionStage, pendingPath, navigate]);
 
   const isHome = location.pathname === '/';
 
   return (
     <ThemeProvider theme={theme}>
       <GlitchBackground />
-      {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
+      {isHome && <Navbar onNavigate={handleNavigate} />}
+      <PageTransition stage={transitionStage} setStage={setTransitionStage} />
 
       <div
         style={{
@@ -57,7 +59,7 @@ const App = () => {
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
-          {showContent && (
+          {transitionStage !== 'closing' && (
             <motion.div
               key={location.pathname}
               initial={{ opacity: 0, y: 20 }}
@@ -83,6 +85,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
