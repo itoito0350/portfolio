@@ -22,27 +22,32 @@ const App = () => {
 
   const [stage, setStage] = useState('idle'); // 'idle', 'closing', 'changing', 'opening'
   const [nextPath, setNextPath] = useState(null);
-  const [showContent, setShowContent] = useState(true);
 
   const isHome = location.pathname === '/';
 
+  // Función para manejar navegación con animación
   const onNavigate = (path) => {
     if (path !== location.pathname && stage === 'idle') {
       setNextPath(path);
       setStage('closing');
-      setShowContent(false);
     }
   };
 
   useEffect(() => {
-    if (stage === 'changing' && nextPath) {
+    if (stage === 'closing') {
+      // Después de animar cierre, cambiamos ruta
+      const timeout = setTimeout(() => {
+        setStage('changing');
+      }, 1000); // Duración animación cortinas cierre
+      return () => clearTimeout(timeout);
+    } else if (stage === 'changing' && nextPath) {
       navigate(nextPath);
       setStage('opening');
     } else if (stage === 'opening') {
+      // Abrimos cortinas y luego volvemos a idle
       const timeout = setTimeout(() => {
         setStage('idle');
-        setShowContent(true);
-      }, 1000); // Debe coincidir con la duración de la animación
+      }, 1000); // Duración animación cortinas apertura
       return () => clearTimeout(timeout);
     }
   }, [stage, nextPath, navigate]);
@@ -60,10 +65,12 @@ const App = () => {
           marginRight: 'auto',
           maxWidth: '1200px',
           padding: '0 1rem',
+          pointerEvents: stage === 'closing' || stage === 'changing' ? 'none' : 'auto',
+          userSelect: stage === 'closing' || stage === 'changing' ? 'none' : 'auto',
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
-          {showContent && (
+          {stage !== 'closing' && stage !== 'changing' && (
             <motion.div
               key={location.pathname}
               initial={{ opacity: 0, y: 20 }}
@@ -89,4 +96,3 @@ const App = () => {
 };
 
 export default App;
-
