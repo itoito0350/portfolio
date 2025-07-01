@@ -89,4 +89,4 @@ export const Overlay = styled.div`
   z-index: 9999;
   pointer-events: none;
 `;
-export { TransitionContainer, TopLayer, BottomLayer, GlitchLine, Overlay };
+export { TransitionContainer, TopLayer, BottomLayer, GlitchLine };
