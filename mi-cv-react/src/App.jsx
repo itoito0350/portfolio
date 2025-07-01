@@ -17,31 +17,34 @@ import { theme } from './styles/theme';
 import './styles/index.css';
 
 const App = () => {
-  const [isAnimating, setIsAnimating] = useState(false); // << empezaba en false
-  const [showContent, setShowContent] = useState(true); // << mostraba contenido de entrada
   const location = useLocation();
+  const isHome = location.pathname === '/';
+
+  // Estado para animar solo en navegaciones distintas a la inicial
+  const [isAnimating, setIsAnimating] = useState(false);
+  // Estado para mostrar contenido con retraso en navegación
+  const [showContent, setShowContent] = useState(isHome);
 
   useEffect(() => {
-  if (location.pathname === '/') {
-    // No animar ni ocultar contenido al entrar o volver a home
-    setIsAnimating(false);
-    setShowContent(true);
-    return;
-  }
+    if (isHome) {
+      // En la página inicial se muestra contenido directamente sin animación
+      setIsAnimating(false);
+      setShowContent(true);
+      return;
+    }
 
-  // Animación solo al navegar fuera del home
-  setIsAnimating(true);
-  setShowContent(false);
+    // En otras rutas: empieza animación y oculta contenido
+    setIsAnimating(true);
+    setShowContent(false);
 
-  const timer = setTimeout(() => {
-    setIsAnimating(false);
-    setShowContent(true);
-  }, 800); // Duración animación, ajusta si quieres
+    // Retrasa la aparición del contenido hasta que la animación termine
+    const timer = setTimeout(() => {
+      setIsAnimating(false);
+      setShowContent(true);
+    }, 900); // Ajusta este tiempo según duración de animación en PageTransition
 
-  return () => clearTimeout(timer);
-}, [location]);
-
-  const isHome = location.pathname === '/';
+    return () => clearTimeout(timer);
+  }, [location, isHome]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -65,7 +68,7 @@ const App = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
             >
               <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Header />} />
@@ -85,3 +88,4 @@ const App = () => {
 };
 
 export default App;
+
