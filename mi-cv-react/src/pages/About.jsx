@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AboutContainer } from '../styles/AboutStyles';
-
+import GreenSmoke from '../components/GreenSmoke'; // tu SVG animado
 
 const About = () => {
   const [isFading, setIsFading] = useState(false);
