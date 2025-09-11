@@ -30,6 +30,19 @@ const Projects = () => {
       title: 'GYM-FIT',
       description: 'Web platform for gyms. React + Django.',
       github: 'https://github.com/itoito0350/Django-react_project.git'
+    },
+    {
+      title: 'Customer Segmentation RFM',
+      description: 'Machine Learning project for customer segmentation.',
+      github: 'https://github.com/itoito0350/rfm-analysis.git',
+      demo: 'https://itoito0350.github.io/rfm-analysis/',
+      
+    },
+    {
+      title: 'Loan Approval Prediction',
+      description: 'Machine Learning model for loan approval predictions.',
+      github: 'https://github.com/itoito0350/Loan-Approval-Prediction-A-Balanced-Data-Approach.git',
+      
     }
   ];
 
