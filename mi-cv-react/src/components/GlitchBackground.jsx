@@ -1,22 +1,13 @@
-
 import React from 'react';
-import {Overlay} from "../styles/GlitchBackgroundStyles";
-
-
-
+import { Overlay } from "../styles/GlitchBackgroundStyles";
 
 const GlitchBackground = ({ isAnimating }) => {
   return (
-    <>
-      {isAnimating && (
-        <Overlay
-          initial={{ y: '100%' }}
-          animate={{ y: '0%' }}
-          exit={{ y: '-100%' }}
-          transition={{ duration: 0.9, ease: 'easeInOut' }}
-        />
-      )}
-    </>
+    <Overlay
+      initial={{ y: '100%' }}
+      animate={{ y: isAnimating ? '0%' : '-100%' }}
+      transition={{ duration: 0.8, ease: 'easeInOut' }}
+    />
   );
 };
 
