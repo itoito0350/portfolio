@@ -4,6 +4,7 @@ import interBackground from '../assets/inter.jpg';
 const AboutContainer = styled.section`
   position: relative;
   overflow: hidden;
+  margin-top: 40px; 
 
   &::before {
     content: '';
@@ -16,21 +17,21 @@ const AboutContainer = styled.section`
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    transform: rotate(180deg); /* 🔄 Ajusta según lo que necesites */
+    transform: rotate(180deg);
     z-index: 0;
-    opacity: 0.2; /* Puedes subirla o bajarla */
+    opacity: 0.2;
     pointer-events: none;
   }
 
-  /* Todo el contenido encima del fondo */
+  
   > * {
     position: relative;
     z-index: 2;
   }
 
-  /* Resto de tus estilos como antes */
+  
   max-width: 800px;
-  margin: 1rem auto;
+  margin: 0 auto; /* Cambiado: solo margen horizontal */
   padding: 1rem 2rem;
   color: white;
   border-radius: 10px;
@@ -41,6 +42,7 @@ const AboutContainer = styled.section`
     letter-spacing: 1.5px;
     margin-bottom: 20px;
     font-size: 2.5rem;
+    margin-top: 0; /* Aseguramos que no tenga margen superior */
   }
 
   p {
@@ -49,6 +51,7 @@ const AboutContainer = styled.section`
     font-family: ${(props) => props.theme.fontFamily.main};
     font-weight: bold;
     color: #b3b3b3;
+    margin: 0.5rem 0; /* Reducido margen vertical */
   }
 
   span {
@@ -57,7 +60,7 @@ const AboutContainer = styled.section`
   }
 
   button {
-    margin-top: 2rem;
+    margin-top: 1.5rem; /* Reducido desde 2rem */
     padding: 0.8rem 2rem;
     background: #4e8477;
     color: white;
@@ -70,13 +73,20 @@ const AboutContainer = styled.section`
   @media (max-width: 768px) {
     max-width: 90%;
     padding: 1rem;
+    margin-top: 20px; 
 
     h2 {
       font-size: 2rem;
+      margin-bottom: 15px;
     }
 
     p {
       font-size: 1rem;
+      margin: 0.3rem 0;
+    }
+
+    button {
+      margin-top: 1rem;
     }
   }
 `;
