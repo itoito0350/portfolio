@@ -23,26 +23,29 @@ const App = () => {
   // Estado para controlar las animaciones
   const [isAnimating, setIsAnimating] = useState(false);
   const [showContent, setShowContent] = useState(true);
+  const [showNavbar, setShowNavbar] = useState(isHome);
 
   useEffect(() => {
-    // Si estamos en home, no animar
+    // Si estamos en home, mostrar navbar inmediatamente
     if (isHome) {
+      setShowNavbar(true);
       setIsAnimating(false);
       setShowContent(true);
       return;
     }
 
-    // Iniciar animación al cambiar de ruta
+    // En otras rutas: ocultar navbar y iniciar animación
+    setShowNavbar(false);
     setIsAnimating(true);
     setShowContent(false);
 
     const animationTimer = setTimeout(() => {
       setIsAnimating(false);
-    }, 800); // Duración de la animación
+    }, 800);
 
     const contentTimer = setTimeout(() => {
       setShowContent(true);
-    }, 400); // Mostrar contenido a mitad de animación
+    }, 400);
 
     return () => {
       clearTimeout(animationTimer);
@@ -54,14 +57,14 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlitchBackground isAnimating={isAnimating} />
       
-      {/* Navbar siempre visible */}
-      <Navbar setIsAnimating={setIsAnimating} />
+      {/* Navbar solo visible en Home */}
+      {showNavbar && <Navbar setIsAnimating={setIsAnimating} />}
       
       <PageTransition isAnimating={isAnimating} />
 
       <div
         style={{
-          marginTop: isHome ? '200px' : '140px',
+          marginTop: isHome ? '200px' : '40px',
           marginLeft: 'auto',
           marginRight: 'auto',
           maxWidth: '1200px',
