@@ -20,55 +20,67 @@ const App = () => {
   const location = useLocation();
   const isHome = location.pathname === '/';
 
-  // Estado para animar solo en navegaciones distintas a la inicial
+  // Estado para controlar las animaciones
   const [isAnimating, setIsAnimating] = useState(false);
-  // Estado para mostrar contenido con retraso en navegación
-  const [showContent, setShowContent] = useState(isHome);
+  const [showContent, setShowContent] = useState(true);
 
   useEffect(() => {
+    // Si estamos en home, no animar
     if (isHome) {
-      // En la página inicial se muestra contenido directamente sin animación
       setIsAnimating(false);
       setShowContent(true);
       return;
     }
 
-    // En otras rutas: empieza animación y oculta contenido
+    // Iniciar animación al cambiar de ruta
     setIsAnimating(true);
     setShowContent(false);
 
-    // Retrasa la aparición del contenido hasta que la animación termine
-    const timer = setTimeout(() => {
+    const animationTimer = setTimeout(() => {
       setIsAnimating(false);
-      setShowContent(true);
-    }, 900); // Ajusta este tiempo según duración de animación en PageTransition
+    }, 800); // Duración de la animación
 
-    return () => clearTimeout(timer);
+    const contentTimer = setTimeout(() => {
+      setShowContent(true);
+    }, 400); // Mostrar contenido a mitad de animación
+
+    return () => {
+      clearTimeout(animationTimer);
+      clearTimeout(contentTimer);
+    };
   }, [location, isHome]);
 
   return (
     <ThemeProvider theme={theme}>
-      <GlitchBackground />
-      {isHome && <Navbar setIsAnimating={setIsAnimating} />}
-      <PageTransition isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
+      <GlitchBackground isAnimating={isAnimating} />
+      
+      {/* Navbar siempre visible */}
+      <Navbar setIsAnimating={setIsAnimating} />
+      
+      <PageTransition isAnimating={isAnimating} />
 
       <div
         style={{
-          marginTop: isHome ? '200px' : '40px',
+          marginTop: isHome ? '200px' : '140px',
           marginLeft: 'auto',
           marginRight: 'auto',
           maxWidth: '1200px',
           padding: '0 1rem',
+          minHeight: 'calc(100vh - 300px)'
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
           {showContent && (
             <motion.div
               key={location.pathname}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ 
+                duration: 0.7, 
+                ease: 'easeInOut',
+                delay: isHome ? 0 : 0.3 
+              }}
             >
               <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Header />} />
@@ -88,4 +100,3 @@ const App = () => {
 };
 
 export default App;
-
