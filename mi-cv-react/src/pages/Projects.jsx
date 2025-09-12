@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ProjectsContainer, ProjectCard } from "../styles/ProjectsStyles";
 
 const Projects = () => {
   const [isFading, setIsFading] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const navigate = useNavigate();
+  const containerRef = useRef(null);
 
   const handleBackClick = () => {
     setIsFading(true);
@@ -44,6 +46,9 @@ const Projects = () => {
     }
   ];
 
+  // Duplicar proyectos para efecto infinito
+  const duplicatedProjects = [...projects, ...projects];
+
   return (
     <ProjectsContainer
       as={motion.section}
@@ -55,66 +60,92 @@ const Projects = () => {
     >
       <h2>My Projects</h2>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '20px',
-        width: '100%'
-      }}>
-        {projects.map((project, i) => (
-          <ProjectCard
-            key={i}
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.3 }}
-            style={{ 
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between'
-            }}
-          >
-            <div>
+      {/* Contenedor del carrusel infinito */}
+      <div 
+        ref={containerRef}
+        style={{
+          position: 'relative',
+          width: '100%',
+          overflow: 'hidden',
+          padding: '20px 0',
+          margin: '30px 0'
+        }}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        <motion.div
+          style={{
+            display: 'flex',
+            gap: '20px',
+            width: 'max-content'
+          }}
+          animate={{
+            x: [0, -((300 + 20) * projects.length)] // Ancho de tarjeta + gap
+          }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 20,
+              ease: "linear"
+            }
+          }}
+          whileHover={{ scale: 1.02 }}
+        >
+          {duplicatedProjects.map((project, i) => (
+            <ProjectCard
+              key={i}
+              style={{
+                minWidth: '300px',
+                height: '200px',
+                flexShrink: 0
+              }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+            >
               <h3>{project.title}</h3>
               <p>{project.description}</p>
-            </div>
-            
-            <div style={{ 
-              marginTop: '15px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px'
-            }}>
-              {project.github && (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ 
-                    color: '#4CAF50', 
-                    textDecoration: 'underline',
-                    fontSize: '14px'
-                  }}
-                >
-                  📁 View on GitHub
-                </a>
-              )}
-              {project.demo && (
-                <a
-                  href={project.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ 
-                    color: '#4cc9f0', 
-                    textDecoration: 'underline',
-                    fontSize: '14px'
-                  }}
-                >
-                  🌐 Live Demo
-                </a>
-              )}
-            </div>
-          </ProjectCard>
-        ))}
+              
+              <div style={{ 
+                marginTop: '15px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ 
+                      color: '#4CAF50', 
+                      textDecoration: 'underline',
+                      fontSize: '14px'
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    📁 View on GitHub
+                  </a>
+                )}
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ 
+                      color: '#4cc9f0', 
+                      textDecoration: 'underline',
+                      fontSize: '14px'
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    🌐 Live Demo
+                  </a>
+                )}
+              </div>
+            </ProjectCard>
+          ))}
+        </motion.div>
       </div>
 
       <button onClick={handleBackClick} style={{ marginTop: '30px' }}>
