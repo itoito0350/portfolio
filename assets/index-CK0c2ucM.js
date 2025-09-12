@@ -114,7 +114,7 @@ Please change the parent <Route path="${C}"> to <Route path="${C==="/"?"*":`${C}
       filter: hue-rotate(-45deg);
     }
   }
-`,HI=({isAnimating:i})=>le.jsx(le.Fragment,{children:i&&le.jsx(VI,{initial:{y:"100%"},animate:{y:"0%"},exit:{y:"-100%"},transition:{duration:.9,ease:"easeInOut"}})}),WI=Jt.div`
+`,HI=({isAnimating:i})=>le.jsx(VI,{initial:{y:"100%"},animate:{y:i?"0%":"-100%"},transition:{duration:.8,ease:"easeInOut"}}),WI=Jt.div`
   position: fixed;
   top: 0;
   left: 0;
