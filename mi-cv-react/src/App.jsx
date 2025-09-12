@@ -20,12 +20,22 @@ const App = () => {
   const location = useLocation();
   const isHome = location.pathname === '/';
 
-  // Estado para controlar las animaciones
+  // Estado para controlar las animaciones - INICIALMENTE DESACTIVADO
   const [isAnimating, setIsAnimating] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const [showNavbar, setShowNavbar] = useState(isHome);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
+    // PRIMERA CARGA: No animar nada
+    if (isInitialLoad) {
+      setIsInitialLoad(false);
+      setShowNavbar(isHome);
+      setIsAnimating(false);
+      setShowContent(true);
+      return;
+    }
+
     // Si estamos en home, mostrar navbar inmediatamente
     if (isHome) {
       setShowNavbar(true);
@@ -51,7 +61,7 @@ const App = () => {
       clearTimeout(animationTimer);
       clearTimeout(contentTimer);
     };
-  }, [location, isHome]);
+  }, [location, isHome, isInitialLoad]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -76,7 +86,7 @@ const App = () => {
           {showContent && (
             <motion.div
               key={location.pathname}
-              initial={{ opacity: 0, y: 30 }}
+              initial={isInitialLoad ? false : { opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
               transition={{ 
