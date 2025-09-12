@@ -10,26 +10,32 @@ const PageWrapper = ({ children, isAnimating, setIsAnimating }) => {
     setIsAnimating(true);
     setShowContent(false);
 
-    const timeout = setTimeout(() => {
+    const animationTimeout = setTimeout(() => {
       setIsAnimating(false);
-      setShowContent(true);
-    }, 1200);  // Le damos un poco más de margen para que la animación sea suave
+    }, 800);
 
-    return () => clearTimeout(timeout);
-  }, []);
+    const contentTimeout = setTimeout(() => {
+      setShowContent(true);
+    }, 400);
+
+    return () => {
+      clearTimeout(animationTimeout);
+      clearTimeout(contentTimeout);
+    };
+  }, [setIsAnimating]);
 
   return (
     <>
       <GlitchBackground isAnimating={isAnimating} />
 
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence mode="wait">
         {isAnimating && (
           <Overlay
             key="page-transition"
-            initial={{ height: '0%', top: '50%', bottom: '50%' }}  // Estado inicial para que no salte
+            initial={{ height: '0%', top: '50%', bottom: '50%' }}
             animate={{ height: '100%', top: '0%', bottom: '0%' }}
             exit={{ height: '0%', top: '50%', bottom: '50%' }}
-            transition={{ duration: 1.5, ease: 'easeInOut' }}
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
           />
         )}
       </AnimatePresence>
