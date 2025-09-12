@@ -32,7 +32,7 @@ const Logo = styled(motion.div)`
   text-decoration: none;
 
   @media (max-width: 768px) {
-    margin: 5rem auto 0; /* Más margen para bajar y centrar */
+    margin: 5rem auto 0;
     align-items: center;
     text-align: center;
     padding-top: 0;
@@ -156,11 +156,23 @@ const MenuLink = styled(Link)`
   }
 
   @media (max-width: 1200px) {
-    font-size: 1.8rem;
-    letter-spacing: 1rem;
-
+    font-size: 3.5rem;
+    letter-spacing: 0.8rem;
+    line-height: 1.2;
+    text-align: center;
+    
     span {
-      font-size: 1.8rem;
+      font-size: 3.5rem;
+      transform: scaleY(0.8);
+    }
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2.8rem;
+    letter-spacing: 0.5rem;
+    
+    span {
+      font-size: 2.8rem;
     }
   }
 `;
@@ -195,10 +207,10 @@ const MobileMenu = styled(motion.div)`
   background: black;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Bajamos el contenido */
+  justify-content: flex-start;
   align-items: center;
   gap: 35px;
-  padding-top: 6rem; /* Para separar de top */
+  padding-top: 6rem;
   z-index: 99999 !important;
   opacity: 0;
   visibility: hidden;
