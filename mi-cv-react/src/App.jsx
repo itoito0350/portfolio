@@ -20,14 +20,13 @@ const App = () => {
   const location = useLocation();
   const isHome = location.pathname === '/';
 
-  // Estado para controlar las animaciones - INICIALMENTE DESACTIVADO
+  // Estado para controlar las animaciones
   const [isAnimating, setIsAnimating] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const [showNavbar, setShowNavbar] = useState(isHome);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    // PRIMERA CARGA: No animar nada
     if (isInitialLoad) {
       setIsInitialLoad(false);
       setShowNavbar(isHome);
@@ -36,7 +35,6 @@ const App = () => {
       return;
     }
 
-    // Si estamos en home, mostrar navbar inmediatamente
     if (isHome) {
       setShowNavbar(true);
       setIsAnimating(false);
@@ -44,7 +42,6 @@ const App = () => {
       return;
     }
 
-    // En otras rutas: ocultar navbar y iniciar animación
     setShowNavbar(false);
     setIsAnimating(true);
     setShowContent(false);
@@ -67,19 +64,20 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlitchBackground isAnimating={isAnimating} />
       
-      {/* Navbar solo visible en Home */}
       {showNavbar && <Navbar setIsAnimating={setIsAnimating} />}
       
       <PageTransition isAnimating={isAnimating} />
 
+      {/* CONTENEDOR PRINCIPAL MODIFICADO */}
       <div
         style={{
-          marginTop: isHome ? '200px' : '40px',
+          marginTop: isHome ? '140px' : '40px', // REDUCIDO
           marginLeft: 'auto',
           marginRight: 'auto',
           maxWidth: '1200px',
           padding: '0 1rem',
-          minHeight: 'calc(100vh - 300px)'
+          minHeight: 'auto', // CAMBIADO: ya no limita la altura
+          overflow: 'visible' // ASEGURA que el contenido sea visible
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
@@ -93,6 +91,9 @@ const App = () => {
                 duration: 0.7, 
                 ease: 'easeInOut',
                 delay: isHome ? 0 : 0.3 
+              }}
+              style={{
+                width: '100%' // ASEGURA que ocupe todo el ancho disponible
               }}
             >
               <Routes location={location} key={location.pathname}>
