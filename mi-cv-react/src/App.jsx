@@ -11,6 +11,7 @@ import Skills from './pages/Skills';
 import Projects from './pages/Projects';
 import Navbar from './components/Navbar';
 import SkillsTicker from './components/SkillsTicker';
+import NewHomepage from './pages/NewHomepage';
 
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
@@ -101,6 +102,7 @@ const App = () => {
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/skills" element={<Skills />} />
+                <Route path="/new" element={<NewHomepage />} />
               </Routes>
             </motion.div>
           )}
