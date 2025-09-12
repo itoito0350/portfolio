@@ -1,13 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ProjectsContainer, ProjectCard } from "../styles/ProjectsStyles";
 
 const Projects = () => {
   const [isFading, setIsFading] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
   const navigate = useNavigate();
-  const containerRef = useRef(null);
+  const scrollContainerRef = useRef(null);
 
   const handleBackClick = () => {
     setIsFading(true);
@@ -19,9 +18,9 @@ const Projects = () => {
 
   const projects = [
     {
-      title: 'My Projects',
-      description: 'Web and Mobile Application Projects.',
-      github: 'https://github.com/itoito0350/Proyectos.git'
+      title: 'GYM-FIT',
+      description: 'Web platform for gyms. React + Django.',
+      github: 'https://github.com/itoito0350/Django-react_project.git'
     },
     {
       title: 'Civica.React-Native',
@@ -29,9 +28,9 @@ const Projects = () => {
       github: 'https://github.com/itoito0350/proyecto-civica.git'
     },
     {
-      title: 'GYM-FIT',
-      description: 'Web platform for gyms. React + Django.',
-      github: 'https://github.com/itoito0350/Django-react_project.git'
+      title: 'My Projects',
+      description: 'Web and Mobile Application Projects.',
+      github: 'https://github.com/itoito0350/Proyectos.git'
     },
     {
       title: 'Customer Segmentation RFM',
@@ -46,8 +45,17 @@ const Projects = () => {
     }
   ];
 
-  // Duplicar proyectos para efecto infinito
-  const duplicatedProjects = [...projects, ...projects];
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -400, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 400, behavior: 'smooth' });
+    }
+  };
 
   return (
     <ProjectsContainer
@@ -60,45 +68,76 @@ const Projects = () => {
     >
       <h2>My Projects</h2>
 
-      {/* Contenedor del carrusel infinito */}
-      <div 
-        ref={containerRef}
-        style={{
-          position: 'relative',
-          width: '100%',
-          overflow: 'hidden',
-          padding: '20px 0',
-          margin: '30px 0'
-        }}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <motion.div
+      {/* Contenedor principal con botones de navegación */}
+      <div style={{ position: 'relative', width: '100%', margin: '30px 0' }}>
+        
+        {/* Botón izquierdo */}
+        <button
+          onClick={scrollLeft}
+          style={{
+            position: 'absolute',
+            left: '-50px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            zIndex: 10,
+            background: '#4cc9f0',
+            border: 'none',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            color: 'white',
+            fontSize: '20px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          ←
+        </button>
+
+        {/* Contenedor de scroll horizontal */}
+        <div
+          ref={scrollContainerRef}
           style={{
             display: 'flex',
+            overflowX: 'auto',
             gap: '20px',
-            width: 'max-content'
+            padding: '20px 10px',
+            scrollbarWidth: 'thin',
+            scrollbarColor: '#4cc9f0 #1a1a2e',
+            cursor: 'grab',
+            scrollSnapType: 'x mandatory'
           }}
-          animate={{
-            x: [0, -((300 + 20) * projects.length)] // Ancho de tarjeta + gap
-          }}
-          transition={{
-            x: {
-              repeat: Infinity,
-              repeatType: "loop",
-              duration: 20,
-              ease: "linear"
+          onMouseDown={(e) => {
+            const container = scrollContainerRef.current;
+            if (container) {
+              const startX = e.pageX - container.offsetLeft;
+              const scrollLeft = container.scrollLeft;
+              
+              const onMouseMove = (e) => {
+                const x = e.pageX - container.offsetLeft;
+                const walk = (x - startX) * 2;
+                container.scrollLeft = scrollLeft - walk;
+              };
+              
+              const onMouseUp = () => {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+              };
+              
+              document.addEventListener('mousemove', onMouseMove);
+              document.addEventListener('mouseup', onMouseUp);
             }
           }}
-          whileHover={{ scale: 1.02 }}
         >
-          {duplicatedProjects.map((project, i) => (
+          {projects.map((project, i) => (
             <ProjectCard
               key={i}
               style={{
                 minWidth: '300px',
-                height: '200px',
-                flexShrink: 0
+                flexShrink: 0,
+                scrollSnapAlign: 'start'
               }}
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
@@ -122,7 +161,6 @@ const Projects = () => {
                       textDecoration: 'underline',
                       fontSize: '14px'
                     }}
-                    onClick={(e) => e.stopPropagation()}
                   >
                     📁 View on GitHub
                   </a>
@@ -137,7 +175,6 @@ const Projects = () => {
                       textDecoration: 'underline',
                       fontSize: '14px'
                     }}
-                    onClick={(e) => e.stopPropagation()}
                   >
                     🌐 Live Demo
                   </a>
@@ -145,7 +182,42 @@ const Projects = () => {
               </div>
             </ProjectCard>
           ))}
-        </motion.div>
+        </div>
+
+        {/* Botón derecho */}
+        <button
+          onClick={scrollRight}
+          style={{
+            position: 'absolute',
+            right: '-50px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            zIndex: 10,
+            background: '#4cc9f0',
+            border: 'none',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            color: 'white',
+            fontSize: '20px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          →
+        </button>
+      </div>
+
+      {/* Indicador de scroll */}
+      <div style={{
+        textAlign: 'center',
+        color: '#a5b4fc',
+        fontSize: '14px',
+        marginTop: '10px'
+      }}>
+        ← Scroll or use arrows to see more projects →
       </div>
 
       <button onClick={handleBackClick} style={{ marginTop: '30px' }}>
