@@ -1,96 +1,46 @@
 import styled from 'styled-components';
+import interBackground from '../assets/inter.jpg';
 
 const ProjectsContainer = styled.section`
   position: relative;
   overflow: hidden;
-  margin-top: 40px; /* REDUCIDO para empezar más arriba */
 
-  /* Resto de tus estilos */
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 1rem 2rem;
+  max-width: 800px;
+  margin: 1rem auto;
+  padding: 1rem 2rem 3rem; /* poco padding arriba, nada exagerado */
   color: white;
   border-radius: 10px;
   text-align: center;
 
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: url(${interBackground});
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: rotate(180deg);
+    opacity: 0.15; /* fondo muy tenue */
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 2;
+  }
+
   h2 {
     font-family: ${(props) => props.theme.fontFamily.main};
     letter-spacing: 1.5px;
-    margin-bottom: 30px;
-    font-size: 2.5rem;
-    margin-top: 0; /* Sin margen superior extra */
-  }
-
-  /* Contenedor del grid de proyectos */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    margin-top: 20px;
-  }
-
-  /* Tarjetas de proyecto */
-  .project-card {
-    background: rgba(30, 30, 50, 0.7);
-    padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid rgba(78, 132, 119, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(78, 132, 119, 0.4);
-    }
-  }
-
-  h3 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: #4cc9f0;
-  }
-
-  p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    font-family: ${(props) => props.theme.fontFamily.main};
-    color: #b3b3b3;
-    margin: 0.5rem 0;
-  }
-
-  .project-links {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 1rem;
-  }
-
-  a {
-    color: #4CAF50;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border: 1px solid #4CAF50;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-    
-    &:hover {
-      background: #4CAF50;
-      color: white;
-    }
-    
-    &.demo-link {
-      color: #4cc9f0;
-      border-color: #4cc9f0;
-      
-      &:hover {
-        background: #4cc9f0;
-        color: white;
-      }
-    }
+    margin-bottom: 1rem;
+    font-size: 2.2rem;
   }
 
   button {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     padding: 0.8rem 2rem;
     background: #4e8477;
     color: white;
@@ -98,64 +48,45 @@ const ProjectsContainer = styled.section`
     border-radius: 8px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background 0.3s ease;
-    
-    &:hover {
-      background: #3a6b5f;
-    }
+    position: relative;
+    z-index: 2;
   }
 
   @media (max-width: 768px) {
-    max-width: 90%;
-    padding: 1rem;
-    margin-top: 20px; /* Menos margen en móvil */
+    padding: 1rem 1rem 2rem;
 
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-
-    .projects-grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
-      margin-top: 15px;
-    }
-
-    .project-card {
-      padding: 1.2rem;
-    }
-
-    h3 {
-      font-size: 1.3rem;
-    }
-
-    p {
-      font-size: 1rem;
-    }
-
-    .project-links {
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    button {
-      margin-top: 1rem;
-      padding: 0.7rem 1.5rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    margin-top: 15px;
-    padding: 0.8rem;
-    
     h2 {
       font-size: 1.8rem;
-    }
-    
-    .project-card {
-      padding: 1rem;
+      margin-bottom: 1rem;
     }
   }
 `;
 
-export { ProjectsContainer };
+const ProjectCard = styled.div`
+  background: transparent; /* sin cajas visibles */
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+    color: white;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #ccc;
+  }
+
+  a {
+    color: #4CAF50;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+export { ProjectsContainer, ProjectCard };
