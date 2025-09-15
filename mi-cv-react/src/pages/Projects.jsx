@@ -24,7 +24,7 @@ const Projects = () => {
     {
       title: 'Civica.React-Native',
       description: 'Cross-platform app for citizen management.',
-      github: 'https://github.com/itoito0350/proyecto-civica.git'
+      github: 'https://github.com/itoito0350/civic'
     },
     {
       title: 'GYM-FIT',
