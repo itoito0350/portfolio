@@ -17,11 +17,6 @@ const Projects = () => {
 
   const projects = [
     {
-      title: 'My Projects',
-      description: 'Web and Mobile Application Projects.',
-      github: 'https://github.com/itoito0350/Proyectos.git'
-    },
-    {
       title: 'Civica.React-Native',
       description: 'Cross-platform app for citizen management.',
       github: 'https://github.com/itoito0350/civic'
